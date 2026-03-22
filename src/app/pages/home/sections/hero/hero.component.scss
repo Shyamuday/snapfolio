@@ -5,10 +5,19 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-image: var(--hero-mobile);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @include tablet {
+    background-image: var(--hero-tablet);
+  }
+
+  @include desktop {
+    background-image: var(--hero-desktop);
+  }
 
   &::before {
     content: '';

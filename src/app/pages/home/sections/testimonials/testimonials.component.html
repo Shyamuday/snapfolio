@@ -11,8 +11,7 @@
             <blockquote>"{{ t.quote }}"</blockquote>
             <div class="client-info">
                 @if (t.avatarFilename) {
-                <img [ngSrc]="'assets/images/' + t.avatarFilename" [alt]="t.clientName + ' photo'" width="48"
-                    height="48" />
+                <img [ngSrc]="t.avatarFilename" [alt]="t.clientName + ' photo'" width="48" height="48" />
                 }
                 <span class="client-name">{{ t.clientName }}</span>
             </div>

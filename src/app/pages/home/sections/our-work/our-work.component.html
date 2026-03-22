@@ -4,8 +4,7 @@
     <div class="categories-grid">
         @for (cat of workCategories; track cat.category) {
         <a [routerLink]="['/gallery']" [queryParams]="{ category: cat.category }" class="category-card">
-            <img [ngSrc]="'assets/images/' + cat.coverFilename" [alt]="cat.label + ' photography'" width="400"
-                height="300" />
+            <img [ngSrc]="cat.coverFilename" [alt]="cat.label + ' photography'" width="400" height="300" />
             <div class="card-label">
                 <span>{{ cat.label }}</span>
             </div>

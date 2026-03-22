@@ -1,8 +1,8 @@
 <main class="about-page">
     <section class="about-hero">
         <div class="about-hero__image">
-            <img [ngSrc]="'assets/images/' + about.profileImageFilename" alt="Aditya — professional photographer"
-                width="600" height="700" priority />
+            <app-responsive-image [image]="profileImage" [width]="600" [height]="700" [priority]="true"
+                imgClass="profile-img" />
         </div>
 
         <div class="about-hero__content">

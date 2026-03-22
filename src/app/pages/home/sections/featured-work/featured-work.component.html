@@ -5,7 +5,7 @@
         @for (photo of featuredPhotos; track photo.id) {
         <a [routerLink]="['/gallery']" [queryParams]="{ category: photo.category }" class="photo-card">
             <div class="card-image">
-                <img [ngSrc]="'assets/images/' + photo.filename" [alt]="photo.title" width="400" height="300" />
+                <img [ngSrc]="photo.filename" [alt]="photo.title" width="400" height="300" />
             </div>
             <div class="card-info">
                 <span class="title">{{ photo.title }}</span>

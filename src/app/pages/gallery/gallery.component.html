@@ -15,7 +15,7 @@
     <div class="photo-grid">
         @for (photo of filteredPhotos(); track photo.id; let i = $index) {
         <button class="photo-item" (click)="openLightbox(i, $event)">
-            <img [ngSrc]="'assets/images/' + photo.filename" [alt]="photo.title" width="400" height="300" />
+            <img [ngSrc]="photo.filename" [alt]="photo.title" width="400" height="300" />
         </button>
         }
     </div>

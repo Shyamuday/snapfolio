@@ -1,7 +1,8 @@
-<section class="hero" [style.background-image]="'url(assets/images/golden-hour.jpg)'">
+<section class="hero" [style.--hero-mobile]="'url(' + hero.mobile + ')'"
+    [style.--hero-tablet]="'url(' + hero.tablet + ')'" [style.--hero-desktop]="'url(' + hero.desktop + ')'">
     <div class="hero-content">
-        <h1>Alexandra Moore</h1>
-        <p>Capturing moments that last a lifetime — landscapes, portraits, and everything in between.</p>
+        <h1>Aditya</h1>
+        <p>Capturing moments that last a lifetime — weddings, fashion, and travel photography.</p>
         <div class="cta-group">
             <a routerLink="/gallery" class="btn btn-primary">View Gallery</a>
             <a routerLink="/contact" class="btn btn-secondary">Get In Touch</a>
