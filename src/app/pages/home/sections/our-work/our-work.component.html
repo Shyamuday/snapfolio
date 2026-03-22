@@ -1,0 +1,17 @@
+<section class="our-work">
+    <h2 class="section-heading">Our Work</h2>
+
+    <div class="categories-grid">
+        @for (cat of workCategories; track cat.category) {
+        <a [routerLink]="['/gallery']" [queryParams]="{ category: cat.category }" class="category-card">
+            <img [ngSrc]="'assets/images/' + cat.coverFilename" [alt]="cat.label + ' photography'" width="400"
+                height="300" />
+            <div class="card-label">
+                <span>{{ cat.label }}</span>
+            </div>
+        </a>
+        }
+    </div>
+
+    <a routerLink="/gallery" class="view-all-link">View All Work →</a>
+</section>

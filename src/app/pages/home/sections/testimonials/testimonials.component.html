@@ -1,0 +1,22 @@
+<section class="testimonials">
+    <h2 class="section-heading">What Our Clients Say</h2>
+    <div class="testimonials-grid">
+        @for (t of testimonials; track t.id) {
+        <div class="testimonial-card">
+            <div class="star-rating">
+                @for (star of getStars(t.rating); track star) {
+                <span class="star">★</span>
+                }
+            </div>
+            <blockquote>"{{ t.quote }}"</blockquote>
+            <div class="client-info">
+                @if (t.avatarFilename) {
+                <img [ngSrc]="'assets/images/' + t.avatarFilename" [alt]="t.clientName + ' photo'" width="48"
+                    height="48" />
+                }
+                <span class="client-name">{{ t.clientName }}</span>
+            </div>
+        </div>
+        }
+    </div>
+</section>

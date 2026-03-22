@@ -1,0 +1,113 @@
+.lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.lightbox-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 100%;
+}
+
+.photo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    max-width: 80vw;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 4px;
+    display: block;
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: -2.5rem;
+  right: 0;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #fff;
+    outline: none;
+  }
+}
+
+.nav-btn {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  font-size: 2rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0 0.75rem;
+  transition: background 0.2s, border-color 0.2s;
+
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #fff;
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+}
+
+.caption {
+  position: absolute;
+  bottom: -2.5rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+}
+
+.caption-title {
+  font-weight: 600;
+}
+
+.caption-category {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

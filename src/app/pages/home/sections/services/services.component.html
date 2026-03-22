@@ -1,0 +1,14 @@
+<section class="services">
+    <h2 class="section-heading">Our Services</h2>
+    <div class="services-grid">
+        @for (service of services; track service.id) {
+        <div class="service-card">
+            <div class="service-icon">
+                <img [ngSrc]="'assets/images/' + service.iconFilename" [alt]="service.title" width="80" height="80" />
+            </div>
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.description }}</p>
+        </div>
+        }
+    </div>
+</section>

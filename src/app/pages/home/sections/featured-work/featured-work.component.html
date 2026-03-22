@@ -1,0 +1,21 @@
+<section class="featured-work">
+    <h2 class="section-heading">Featured Work</h2>
+
+    <div class="photo-grid">
+        @for (photo of featuredPhotos; track photo.id) {
+        <a [routerLink]="['/gallery']" [queryParams]="{ category: photo.category }" class="photo-card">
+            <div class="card-image">
+                <img [ngSrc]="'assets/images/' + photo.filename" [alt]="photo.title" width="400" height="300" />
+            </div>
+            <div class="card-info">
+                <span class="title">{{ photo.title }}</span>
+                <span class="category">{{ photo.category }}</span>
+            </div>
+        </a>
+        }
+    </div>
+
+    <div class="view-all-wrapper">
+        <a routerLink="/gallery" class="view-all-link">View Full Gallery →</a>
+    </div>
+</section>

@@ -1,0 +1,26 @@
+<main class="gallery-page">
+    <h1 class="gallery-heading">Gallery</h1>
+
+    <div class="filter-bar">
+        <button class="filter-btn" [class.active]="activeCategory() === 'All'" (click)="setCategory('All')">
+            All
+        </button>
+        @for (cat of portfolioService.categories; track cat) {
+        <button class="filter-btn" [class.active]="activeCategory() === cat" (click)="setCategory(cat)">
+            {{ cat }}
+        </button>
+        }
+    </div>
+
+    <div class="photo-grid">
+        @for (photo of filteredPhotos(); track photo.id; let i = $index) {
+        <button class="photo-item" (click)="openLightbox(i, $event)">
+            <img [ngSrc]="'assets/images/' + photo.filename" [alt]="photo.title" width="400" height="300" />
+        </button>
+        }
+    </div>
+
+    @if (lightboxIndex() !== null) {
+    <app-lightbox [photos]="filteredPhotos()" [activeIndex]="lightboxIndex()!" (close)="closeLightbox()" />
+    }
+</main>

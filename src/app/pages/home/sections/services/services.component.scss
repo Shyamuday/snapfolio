@@ -1,0 +1,68 @@
+@use 'styles' as *;
+
+.services {
+  background-color: #f8f8f8;
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.section-heading {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  color: #1a1a1a;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include desktop {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.service-card {
+  padding: 2rem 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-align: center;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem;
+    color: #1a1a1a;
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: #555555;
+    line-height: 1.6;
+  }
+}
+
+.service-icon {
+  display: flex;
+  justify-content: center;
+
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}

@@ -1,0 +1,22 @@
+<div class="lightbox-backdrop" role="dialog" aria-modal="true" aria-label="Photo lightbox"
+    (click)="onBackdropClick($event)">
+    <div class="lightbox-content">
+        <button #closeBtn class="close-btn" (click)="close.emit()" aria-label="Close lightbox">X</button>
+
+        <button class="nav-btn prev-btn" (click)="prev()" [disabled]="!hasPrev()"
+            aria-label="Previous photo">&lsaquo;</button>
+
+        <div class="photo-wrapper">
+            <img [ngSrc]="'assets/images/' + currentPhoto().filename" [alt]="currentPhoto().title" width="1200"
+                height="800" priority />
+        </div>
+
+        <button class="nav-btn next-btn" (click)="next()" [disabled]="!hasNext()"
+            aria-label="Next photo">&rsaquo;</button>
+
+        <div class="caption">
+            <span class="caption-title">{{ currentPhoto().title }}</span>
+            <span class="caption-category">{{ currentPhoto().category }}</span>
+        </div>
+    </div>
+</div>

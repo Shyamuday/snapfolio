@@ -1,0 +1,12 @@
+<section class="philosophy">
+    <div class="philosophy-inner">
+        <div class="philosophy-image">
+            <img [ngSrc]="'assets/images/' + philosophy.supportingImageFilename"
+                alt="Mountain landscape representing the photographer's philosophy" width="600" height="450" />
+        </div>
+        <div class="philosophy-text">
+            <h2>{{ philosophy.heading }}</h2>
+            <p>{{ philosophy.body }}</p>
+        </div>
+    </div>
+</section>
