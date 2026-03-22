@@ -6,7 +6,6 @@ import { PhilosophyComponent } from './sections/philosophy/philosophy.component'
 import { OurWorkComponent } from './sections/our-work/our-work.component';
 import { ServicesComponent } from './sections/services/services.component';
 import { TestimonialsComponent } from './sections/testimonials/testimonials.component';
-import { CtaComponent } from './sections/cta/cta.component';
 import { IMAGES } from '../../core/config/image-paths';
 
 @Component({
@@ -19,7 +18,6 @@ import { IMAGES } from '../../core/config/image-paths';
         OurWorkComponent,
         ServicesComponent,
         TestimonialsComponent,
-        CtaComponent,
     ],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss',

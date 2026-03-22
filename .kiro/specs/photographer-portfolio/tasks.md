@@ -73,7 +73,7 @@ Angular 21 SSR, fully frontend-only. All data hardcoded in `portfolio.data.ts`. 
   - [x] 4.7 Integrate `LightboxComponent` into `GalleryComponent` — `lightboxIndex` signal; open on photo click (store reference to clicked element); close returns focus to that element; pass `filteredPhotos` and `lightboxIndex` as inputs
   - _Requirements: 6.1–6.6, 7.1–7.6, 12.1, 13.1–13.3, 14.2–14.4_
 
-- [~] 5. Checkpoint — ensure all tests pass
+- [ ] 5. Checkpoint — ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [x] 6. Build About page
