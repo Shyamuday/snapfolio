@@ -1,44 +1,30 @@
-import { Component, signal, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
+import { IMAGES } from '../../core/config/image-paths';
 
 @Component({
     selector: 'app-contact',
     standalone: true,
-    imports: [ReactiveFormsModule],
+    imports: [],
     templateUrl: './contact.component.html',
     styleUrl: './contact.component.scss',
 })
 export class ContactComponent {
-    private readonly fb = inject(FormBuilder);
+    readonly image = IMAGES.photoMarriage;
 
-    submitted = signal(false);
+    readonly contactItems = [
+        { icon: 'phone', label: 'Call Us', value: '+91 98765 43210', href: 'tel:+919876543210' },
+        { icon: 'email', label: 'Email Us', value: 'aditya@photography.com', href: 'mailto:aditya@photography.com' },
+        { icon: 'map', label: 'Find Us', value: 'Pune, Maharashtra', href: null },
+    ];
 
-    form = this.fb.group({
-        name: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        subject: ['', Validators.required],
-        message: ['', Validators.required],
-    });
+    readonly socialLinks = [
+        { name: 'Instagram', href: 'https://www.instagram.com/aditya_photography/', icon: IMAGES.instagramIcon },
+        { name: 'WhatsApp', href: 'https://wa.me/919876543210', icon: IMAGES.whatsappIcon },
+    ];
 
-    constructor(private titleService: Title, private metaService: Meta) {
-        this.titleService.setTitle('Contact | Snapfolio');
-        this.metaService.updateTag({ name: 'description', content: 'Get in touch to book a session or inquire about prints and commissions.' });
-        this.metaService.updateTag({ property: 'og:title', content: 'Contact | Snapfolio' });
-        this.metaService.updateTag({ property: 'og:description', content: 'Get in touch to book a session or inquire about prints and commissions.' });
+    constructor(private title: Title, private meta: Meta) {
+        this.title.setTitle('Contact | Snapfolio');
+        this.meta.updateTag({ name: 'description', content: 'Get in touch to book a session or inquire about prints.' });
     }
-
-    onSubmit(): void {
-        if (this.form.valid) {
-            this.submitted.set(true);
-            this.form.reset();
-        } else {
-            this.form.markAllAsTouched();
-        }
-    }
-
-    get name() { return this.form.get('name'); }
-    get email() { return this.form.get('email'); }
-    get subject() { return this.form.get('subject'); }
-    get message() { return this.form.get('message'); }
 }
