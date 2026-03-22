@@ -1,0 +1,44 @@
+<div class="carousel" aria-roledescription="carousel" aria-label="Photo carousel">
+
+    <!-- Slides -->
+    <div class="carousel__track">
+        @for (slide of slides; track slide.image; let i = $index) {
+        <div class="carousel__slide" [class.active]="i === activeIndex()" role="group" aria-roledescription="slide"
+            [attr.aria-label]="(i + 1) + ' of ' + total()" [attr.aria-hidden]="i !== activeIndex()">
+            <img [src]="slide.image" [alt]="slide.title" class="carousel__img" loading="lazy" />
+            <div class="carousel__overlay">
+                <div class="carousel__text">
+                    <h3 class="carousel__title">{{ slide.title }}</h3>
+                    @if (slide.subtitle) {
+                    <p class="carousel__subtitle">{{ slide.subtitle }}</p>
+                    }
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- Prev / Next -->
+    <button class="carousel__btn carousel__btn--prev" (click)="prev()" aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" width="20" height="20">
+            <polyline points="15 18 9 12 15 6" />
+        </svg>
+    </button>
+    <button class="carousel__btn carousel__btn--next" (click)="next()" aria-label="Next slide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" width="20" height="20">
+            <polyline points="9 18 15 12 9 6" />
+        </svg>
+    </button>
+
+    <!-- Dots -->
+    <div class="carousel__dots" role="tablist" aria-label="Slide navigation">
+        @for (slide of slides; track slide.image; let i = $index) {
+        <button class="carousel__dot" [class.active]="i === activeIndex()" (click)="goTo(i)" role="tab"
+            [attr.aria-selected]="i === activeIndex()" [attr.aria-label]="'Go to slide ' + (i + 1)">
+        </button>
+        }
+    </div>
+
+</div>
