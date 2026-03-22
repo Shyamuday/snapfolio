@@ -1,11 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 import { PortfolioService } from '../../../../core/services/portfolio.service';
 
 @Component({
     selector: 'app-testimonials',
     standalone: true,
-    imports: [NgOptimizedImage],
+    imports: [],
     templateUrl: './testimonials.component.html',
     styleUrl: './testimonials.component.scss',
 })
