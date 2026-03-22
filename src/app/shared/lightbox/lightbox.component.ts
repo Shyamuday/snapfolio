@@ -14,13 +14,13 @@ import {
     inject,
     PLATFORM_ID,
 } from '@angular/core';
-import { isPlatformBrowser, NgOptimizedImage, DOCUMENT } from '@angular/common';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { Photo } from '../../core/data/portfolio.data';
 
 @Component({
     selector: 'app-lightbox',
     standalone: true,
-    imports: [NgOptimizedImage],
+    imports: [],
     templateUrl: './lightbox.component.html',
     styleUrl: './lightbox.component.scss',
 })

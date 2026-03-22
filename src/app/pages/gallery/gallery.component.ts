@@ -1,5 +1,4 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { PortfolioService } from '../../core/services/portfolio.service';
@@ -8,7 +7,7 @@ import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
 @Component({
     selector: 'app-gallery',
     standalone: true,
-    imports: [NgOptimizedImage, LightboxComponent],
+    imports: [LightboxComponent],
     templateUrl: './gallery.component.html',
     styleUrl: './gallery.component.scss',
 })
