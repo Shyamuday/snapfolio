@@ -8,8 +8,7 @@
             <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
 
             <!-- Gallery with dropdown -->
-            <div class="nav-dropdown" (mouseenter)="galleryDropdownOpen.set(true)"
-                (mouseleave)="galleryDropdownOpen.set(false)">
+            <div class="nav-dropdown" (mouseenter)="openDropdown()" (mouseleave)="scheduleCloseDropdown()">
                 <a routerLink="/gallery" routerLinkActive="active" class="nav-dropdown__trigger">
                     Gallery
                     <svg class="nav-dropdown__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -18,7 +17,8 @@
                     </svg>
                 </a>
                 @if (galleryDropdownOpen()) {
-                <ul class="dropdown-menu" role="menu">
+                <ul class="dropdown-menu" role="menu" (mouseenter)="openDropdown()"
+                    (mouseleave)="scheduleCloseDropdown()">
                     @for (cat of categories; track cat) {
                     <li role="none">
                         <button class="dropdown-item" role="menuitem" (click)="navigateGallery(cat)">

@@ -19,6 +19,7 @@ export class HeaderComponent {
     menuOpen = signal(false);
     galleryDropdownOpen = signal(false);
     mobileGalleryOpen = signal(false);
+    private closeTimer: ReturnType<typeof setTimeout> | null = null;
 
     readonly categories = GALLERY_CATEGORIES;
 
@@ -31,6 +32,20 @@ export class HeaderComponent {
                     this.mobileGalleryOpen.set(false);
                 });
         }
+    }
+
+    openDropdown(): void {
+        if (this.closeTimer) {
+            clearTimeout(this.closeTimer);
+            this.closeTimer = null;
+        }
+        this.galleryDropdownOpen.set(true);
+    }
+
+    scheduleCloseDropdown(): void {
+        this.closeTimer = setTimeout(() => {
+            this.galleryDropdownOpen.set(false);
+        }, 150);
     }
 
     toggleMenu(): void {

@@ -212,21 +212,32 @@ $transition: 0.25s ease;
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 0.75rem);
+  top: 100%;
   left: 50%;
   transform: translateX(-50%);
   background: #1a1a1a;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   padding: 0.4rem 0;
+  margin-top: 0.75rem;
   min-width: 140px;
   list-style: none;
   margin: 0;
   z-index: 200;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 
-  // small arrow pointer
+  // invisible bridge covers the gap between trigger and menu
   &::before {
+    content: '';
+    position: absolute;
+    top: -0.75rem;
+    left: 0;
+    right: 0;
+    height: 0.75rem;
+  }
+
+  // small arrow pointer
+  &::after {
     content: '';
     position: absolute;
     top: -6px;
