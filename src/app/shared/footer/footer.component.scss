@@ -1,124 +1,189 @@
 @use 'styles' as *;
 
-// ─── Variables ───────────────────────────────────────────────────────────────
 $footer-bg: #0d0d0d;
+$footer-border: rgba(255, 255, 255, 0.08);
 $text-color: #f0ede8;
-$text-muted: rgba(255, 255, 255, 0.55);
+$text-muted: rgba(240, 237, 232, 0.5);
 $accent: #b8965a;
 $transition: 0.25s ease;
-$social-icon-size: 36px;
 
-// ─── Host ────────────────────────────────────────────────────────────────────
-:host {
-  display: block;
-}
+:host { display: block; }
 
-// ─── Footer Shell ────────────────────────────────────────────────────────────
+// ── Shell ─────────────────────────────────────────────────────────────────────
 .site-footer {
-  background-color: $footer-bg;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: $footer-bg;
   color: $text-color;
+  border-top: 1px solid $footer-border;
 }
 
-// ─── Inner Layout ────────────────────────────────────────────────────────────
+// ── Main section ──────────────────────────────────────────────────────────────
+.footer-main {
+  padding: 3.5rem 1.25rem 2.5rem;
+}
+
 .footer-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  max-width: 1280px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 3rem 1.25rem 2rem;
 
   @include tablet {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
+    grid-template-columns: 1.6fr 1fr 1.4fr;
     gap: 3rem;
+    align-items: flex-start;
   }
 }
 
-// ─── Brand ───────────────────────────────────────────────────────────────────
-.footer-brand {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-
-  .brand {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: $text-color;
-    transition: color $transition;
-
-    &:hover {
-      color: $accent;
-    }
-  }
-
-  .tagline {
-    font-size: 0.85rem;
-    color: $text-muted;
-    max-width: 220px;
-  }
+// ── Column heading ────────────────────────────────────────────────────────────
+.footer-col__heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $accent;
+  margin: 0 0 1.25rem;
 }
 
-// ─── Nav ─────────────────────────────────────────────────────────────────────
-.footer-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+// ── Col 1: Brand ──────────────────────────────────────────────────────────────
+.footer-logo {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $text-color;
+  margin-bottom: 0.85rem;
+  transition: color $transition;
 
-  a {
-    font-size: 0.9rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: $text-muted;
-    transition: color $transition;
-
-    &:hover {
-      color: $text-color;
-    }
-  }
+  &:hover { color: $accent; }
 }
 
-// ─── Social Icons ────────────────────────────────────────────────────────────
+.footer-tagline {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: $text-muted;
+  max-width: 260px;
+  margin: 0 0 1.5rem;
+}
+
+// ── Social icons ──────────────────────────────────────────────────────────────
 .footer-social {
   display: flex;
-  gap: 1rem;
-  align-items: center;
+  gap: 0.65rem;
 
   a {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: $social-icon-size;
-    height: $social-icon-size;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.1);
-    transition: background-color $transition;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: $text-muted;
+    transition: color $transition, border-color $transition, background $transition;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    img {
-      width: 18px;
-      height: 18px;
-      object-fit: contain;
+      color: $accent;
+      border-color: $accent;
+      background: rgba(184, 150, 90, 0.1);
     }
   }
 }
 
-// ─── Bottom Bar ──────────────────────────────────────────────────────────────
+// ── Col 2: Nav ────────────────────────────────────────────────────────────────
+.footer-col--nav nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+
+  a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: $text-muted;
+    transition: color $transition, padding-left $transition;
+    position: relative;
+
+    &:hover {
+      color: $text-color;
+      padding-left: 0.5rem;
+    }
+  }
+}
+
+// ── Col 3: Contact ────────────────────────────────────────────────────────────
+.contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+}
+
+.contact-list__icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(184, 150, 90, 0.12);
+  border: 1px solid rgba(184, 150, 90, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $accent;
+  margin-top: 0.1rem;
+}
+
+.contact-list__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.contact-list__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $accent;
+}
+
+.contact-list__value {
+  font-size: 0.88rem;
+  color: $text-muted;
+  transition: color $transition;
+
+  a#{&}, &:is(a) {
+    &:hover { color: $text-color; }
+  }
+}
+
+a.contact-list__value:hover {
+  color: $text-color;
+}
+
+// ── Bottom bar ────────────────────────────────────────────────────────────────
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 1rem 1.25rem;
+  border-top: 1px solid $footer-border;
+  padding: 1.1rem 1.25rem;
+}
+
+.footer-bottom__inner {
+  max-width: 1200px;
+  margin: 0 auto;
   text-align: center;
 
   p {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: $text-muted;
+    margin: 0;
   }
 }
