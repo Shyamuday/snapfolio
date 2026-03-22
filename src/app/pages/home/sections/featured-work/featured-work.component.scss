@@ -18,7 +18,7 @@
     display: block;
     width: 3rem;
     height: 3px;
-    background: #c9a96e;
+    background: #e8e0d5;
     margin: 0.75rem auto 0;
   }
 }
@@ -89,8 +89,8 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #c9a96e;
-    background: rgba(201, 169, 110, 0.1);
+    color: #e8e0d5;
+    background: rgba(232, 224, 213, 0.1);
     padding: 0.2rem 0.6rem;
     border-radius: 20px;
     white-space: nowrap;
@@ -106,8 +106,8 @@
 .view-all-link {
   display: inline-block;
   padding: 0.75rem 2rem;
-  border: 2px solid #c9a96e;
-  color: #c9a96e;
+  border: 2px solid #e8e0d5;
+  color: #e8e0d5;
   border-radius: 4px;
   font-size: 1rem;
   font-weight: 600;
@@ -115,7 +115,7 @@
   transition: background 0.2s ease, color 0.2s ease;
 
   &:hover {
-    background: #c9a96e;
-    color: #ffffff;
+    background: #e8e0d5;
+    color: #1a1a1a;
   }
 }

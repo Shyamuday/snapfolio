@@ -44,7 +44,7 @@
 
 .carousel__progress-bar {
   height: 100%;
-  background: #c9a96e;
+  background: #ffffff;
   transition: width 0.05s linear;
 }
 
@@ -128,7 +128,7 @@
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-weight: 500;
-  color: #c9a96e;
+  color: #e8e0d5;
 }
 
 .carousel__title {
@@ -144,7 +144,7 @@
 .carousel__line {
   width: 0;
   height: 2px;
-  background: #c9a96e;
+  background: #e8e0d5;
   margin: 1rem auto 0;
   opacity: 0;
 }
@@ -172,8 +172,8 @@
 
   &:hover,
   &:focus-visible {
-    background: rgba(201, 169, 110, 0.3);
-    border-color: #c9a96e;
+    background: rgba(232, 224, 213, 0.3);
+    border-color: #e8e0d5;
     transform: translateY(-50%) scale(1.1);
     outline: none;
   }
@@ -213,7 +213,7 @@
 
   &.active {
     width: 28px;
-    background: #c9a96e;
+    background: #e8e0d5;
   }
 
   &:hover:not(.active) {

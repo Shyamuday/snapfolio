@@ -27,7 +27,7 @@
 .filter-btn {
   padding: 0.625rem 1.25rem;
   min-height: 44px;
-  border: 2px solid #c9a84c;
+  border: 2px solid #e8e0d5;
   border-radius: 4px;
   background: transparent;
   color: #1a1a1a;
@@ -37,13 +37,13 @@
   transition: background 0.2s, color 0.2s;
 
   &:hover {
-    background: #c9a84c;
-    color: #fff;
+    background: #e8e0d5;
+    color: #1a1a1a;
   }
 
   &.active {
-    background: #c9a84c;
-    color: #fff;
+    background: #e8e0d5;
+    color: #1a1a1a;
   }
 }
 

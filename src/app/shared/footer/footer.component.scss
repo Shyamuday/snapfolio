@@ -4,7 +4,7 @@ $footer-bg: #0d0d0d;
 $footer-border: rgba(255, 255, 255, 0.08);
 $text-color: #f0ede8;
 $text-muted: rgba(240, 237, 232, 0.5);
-$accent: #b8965a;
+$accent: #e8e0d5;
 $transition: 0.25s ease;
 
 :host { display: block; }
@@ -86,7 +86,7 @@ $transition: 0.25s ease;
     &:hover {
       color: $accent;
       border-color: $accent;
-      background: rgba(184, 150, 90, 0.1);
+      background: rgba(232, 224, 213, 0.1);
     }
   }
 }
@@ -133,8 +133,8 @@ $transition: 0.25s ease;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(184, 150, 90, 0.12);
-  border: 1px solid rgba(184, 150, 90, 0.25);
+  background: rgba(232, 224, 213, 0.12);
+  border: 1px solid rgba(232, 224, 213, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
