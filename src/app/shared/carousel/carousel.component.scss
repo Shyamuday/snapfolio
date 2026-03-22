@@ -1,5 +1,28 @@
 @use 'styles' as *;
 
+// ── Keyframes ─────────────────────────────────────────────────────────────────
+@keyframes kenBurns {
+  0%   { transform: scale(1)    translate(0, 0); }
+  50%  { transform: scale(1.08) translate(-1%, -0.5%); }
+  100% { transform: scale(1.12) translate(1%, 0.5%); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes expandLine {
+  from { width: 0; opacity: 0; }
+  to   { width: 60px; opacity: 1; }
+}
+
+// ── Shell ─────────────────────────────────────────────────────────────────────
 .carousel {
   position: relative;
   width: 100%;
@@ -8,7 +31,24 @@
   background: #000;
 }
 
-// ── Slides ────────────────────────────────────────────────────────────────────
+// ── Progress bar ──────────────────────────────────────────────────────────────
+.carousel__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 20;
+}
+
+.carousel__progress-bar {
+  height: 100%;
+  background: #c9a96e;
+  transition: width 0.05s linear;
+}
+
+// ── Track & Slides ────────────────────────────────────────────────────────────
 .carousel__track {
   position: relative;
   width: 100%;
@@ -19,21 +59,41 @@
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.7s ease;
   pointer-events: none;
 
   &.active {
     opacity: 1;
     pointer-events: auto;
+
+    // Ken Burns on the active image
+    .carousel__img {
+      animation: kenBurns 8s ease-in-out forwards;
+    }
+
+    // Text animations — staggered
+    .carousel__subtitle.animate {
+      animation: fadeIn 0.6s ease 0.3s both;
+    }
+
+    .carousel__title.animate {
+      animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
+    }
+
+    .carousel__line.animate {
+      animation: expandLine 0.5s ease 0.75s both;
+    }
   }
 }
 
+// ── Image ─────────────────────────────────────────────────────────────────────
 .carousel__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   display: block;
+  transform-origin: center center;
 }
 
 // ── Overlay + Text ────────────────────────────────────────────────────────────
@@ -42,8 +102,8 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.65) 0%,
-    rgba(0, 0, 0, 0.15) 50%,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.2) 45%,
     transparent 100%
   );
   display: flex;
@@ -51,37 +111,42 @@
   justify-content: center;
   padding: 3rem 1.5rem;
 
-  @include tablet {
-    padding: 4rem 3rem;
-  }
-
-  @include desktop {
-    padding: 5rem 5rem;
-  }
+  @include tablet { padding: 4rem 3rem; }
+  @include desktop { padding: 5rem 5rem; }
 }
 
 .carousel__text {
   color: #fff;
   text-align: center;
-  max-width: 600px;
-}
-
-.carousel__title {
-  font-size: clamp(1.75rem, 5vw, 3.5rem);
-  font-weight: 700;
-  margin: 0 0 0.5rem;
-  letter-spacing: 0.02em;
-  line-height: 1.15;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  max-width: 640px;
 }
 
 .carousel__subtitle {
-  font-size: clamp(0.9rem, 2vw, 1.15rem);
-  margin: 0;
-  opacity: 0.85;
+  font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+  margin: 0 0 0.6rem;
+  opacity: 0;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.18em;
   font-weight: 500;
+  color: #c9a96e;
+}
+
+.carousel__title {
+  font-size: clamp(1.75rem, 5vw, 3.75rem);
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  opacity: 0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.carousel__line {
+  width: 0;
+  height: 2px;
+  background: #c9a96e;
+  margin: 1rem auto 0;
+  opacity: 0;
 }
 
 // ── Prev / Next buttons ───────────────────────────────────────────────────────
@@ -89,8 +154,8 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
   color: #fff;
   width: 3rem;
   height: 3rem;
@@ -101,13 +166,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
   z-index: 10;
+  backdrop-filter: blur(4px);
 
   &:hover,
   &:focus-visible {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: #fff;
+    background: rgba(201, 169, 110, 0.3);
+    border-color: #c9a96e;
+    transform: translateY(-50%) scale(1.1);
     outline: none;
   }
 
@@ -125,34 +192,31 @@
 // ── Dots ──────────────────────────────────────────────────────────────────────
 .carousel__dots {
   position: absolute;
-  bottom: 1.5rem;
-  right: 1.5rem;
+  bottom: 1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 0.5rem;
+  align-items: center;
   z-index: 10;
-
-  @include tablet {
-    bottom: 2rem;
-    right: 2rem;
-  }
 }
 
 .carousel__dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.7);
-  background: transparent;
+  height: 8px;
+  width: 8px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   padding: 0;
-  transition: background 0.2s, border-color 0.2s;
+  transition: width 0.35s ease, background 0.25s ease;
 
   &.active {
-    background: #fff;
-    border-color: #fff;
+    width: 28px;
+    background: #c9a96e;
   }
 
-  &:hover {
-    border-color: #fff;
+  &:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.7);
   }
 }
