@@ -1,14 +1,35 @@
 <header class="site-header">
     <div class="header-inner">
         <!-- Logo / Brand -->
-        <a class="brand" routerLink="/" aria-label="Snapfolio home">
-            Snapfolio
-        </a>
+        <a class="brand" routerLink="/" aria-label="Snapfolio home">Snapfolio</a>
 
         <!-- Desktop Navigation -->
         <nav class="desktop-nav" aria-label="Main navigation">
             <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-            <a routerLink="/gallery" routerLinkActive="active">Gallery</a>
+
+            <!-- Gallery with dropdown -->
+            <div class="nav-dropdown" (mouseenter)="galleryDropdownOpen.set(true)"
+                (mouseleave)="galleryDropdownOpen.set(false)">
+                <a routerLink="/gallery" routerLinkActive="active" class="nav-dropdown__trigger">
+                    Gallery
+                    <svg class="nav-dropdown__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="12" height="12">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </a>
+                @if (galleryDropdownOpen()) {
+                <ul class="dropdown-menu" role="menu">
+                    @for (cat of categories; track cat) {
+                    <li role="none">
+                        <button class="dropdown-item" role="menuitem" (click)="navigateGallery(cat)">
+                            {{ cat }}
+                        </button>
+                    </li>
+                    }
+                </ul>
+                }
+            </div>
+
             <a routerLink="/about" routerLinkActive="active">About</a>
             <a routerLink="/contact" routerLinkActive="active">Contact</a>
         </nav>
@@ -23,11 +44,33 @@
     </div>
 
     <!-- Mobile Overlay Navigation -->
-    <div class="mobile-nav" [class.open]="menuOpen()" aria-hidden="{{ !menuOpen() }}">
+    <div class="mobile-nav" [class.open]="menuOpen()" [attr.aria-hidden]="!menuOpen()">
         <nav aria-label="Mobile navigation">
             <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
                 (click)="closeMenu()">Home</a>
-            <a routerLink="/gallery" routerLinkActive="active" (click)="closeMenu()">Gallery</a>
+
+            <!-- Gallery expandable -->
+            <div class="mobile-gallery-group">
+                <button class="mobile-gallery-toggle" (click)="mobileGalleryOpen.update(v => !v)"
+                    [attr.aria-expanded]="mobileGalleryOpen()">
+                    Gallery
+                    <svg class="mobile-gallery-toggle__chevron" [class.rotated]="mobileGalleryOpen()"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" width="14" height="14">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </button>
+                @if (mobileGalleryOpen()) {
+                <div class="mobile-gallery-sub">
+                    @for (cat of categories; track cat) {
+                    <button class="mobile-gallery-item" (click)="navigateGalleryMobile(cat)">
+                        {{ cat }}
+                    </button>
+                    }
+                </div>
+                }
+            </div>
+
             <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
             <a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">Contact</a>
         </nav>
