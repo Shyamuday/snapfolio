@@ -25,6 +25,7 @@ export interface Service {
     title: string;
     description: string;
     iconFilename: string; // full path via IMAGES
+    category: PhotoCategory;
 }
 
 export interface WorkCategory {
@@ -71,10 +72,10 @@ export const TESTIMONIALS: Testimonial[] = [
 ];
 
 export const SERVICES: Service[] = [
-    { id: 1, title: 'Portrait Photography', description: 'Authentic, expressive portraits for individuals, couples, and families. Studio or on-location sessions tailored to your vision.', iconFilename: IMAGES.photoImage1 },
-    { id: 2, title: 'Landscape Photography', description: 'Fine-art landscape prints that bring the grandeur of the natural world into your home or workspace.', iconFilename: IMAGES.mountainDreams },
-    { id: 3, title: 'Event Photography', description: 'Comprehensive coverage of weddings, corporate events, and celebrations — every meaningful moment preserved.', iconFilename: IMAGES.photoMarriage },
-    { id: 4, title: 'Nature & Wildlife', description: 'Patient, respectful photography of flora and fauna in their natural environment, resulting in images full of life and wonder.', iconFilename: IMAGES.forestWhispers },
+    { id: 1, title: 'Portrait Photography', description: 'Authentic, expressive portraits for individuals, couples, and families. Studio or on-location sessions tailored to your vision.', iconFilename: IMAGES.photoImage1, category: 'Portrait' },
+    { id: 2, title: 'Landscape Photography', description: 'Fine-art landscape prints that bring the grandeur of the natural world into your home or workspace.', iconFilename: IMAGES.mountainDreams, category: 'Landscape' },
+    { id: 3, title: 'Event Photography', description: 'Comprehensive coverage of weddings, corporate events, and celebrations — every meaningful moment preserved.', iconFilename: IMAGES.photoMarriage, category: 'Events' },
+    { id: 4, title: 'Nature & Wildlife', description: 'Patient, respectful photography of flora and fauna in their natural environment, resulting in images full of life and wonder.', iconFilename: IMAGES.forestWhispers, category: 'Nature' },
 ];
 
 export const WORK_CATEGORIES: WorkCategory[] = [

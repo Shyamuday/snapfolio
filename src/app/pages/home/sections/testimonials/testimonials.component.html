@@ -5,32 +5,30 @@
         <h2 class="testimonials__heading">What Clients Say</h2>
     </div>
 
-    <div class="testimonials__track">
-        @for (t of testimonials; track t.id) {
-        <article class="testimonial-card">
-            <!-- Large decorative quote mark -->
-            <span class="testimonial-card__quote-mark" aria-hidden="true">&ldquo;</span>
+    <div class="testimonials__viewport">
+        <div class="testimonials__track">
+            @for (t of doubled; track $index) {
+            <article class="testimonial-card">
+                <span class="testimonial-card__quote-mark" aria-hidden="true">&ldquo;</span>
 
-            <!-- Stars -->
-            <div class="testimonial-card__stars" [attr.aria-label]="t.rating + ' out of 5 stars'">
-                @for (s of getStars(t.rating); track s) {
-                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
-                    <path
-                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                </svg>
-                }
-            </div>
-
-            <blockquote class="testimonial-card__body">{{ t.quote }}</blockquote>
-
-            <footer class="testimonial-card__footer">
-                <div class="testimonial-card__avatar" aria-hidden="true">
-                    {{ t.clientName.charAt(0) }}
+                <div class="testimonial-card__stars" [attr.aria-label]="t.rating + ' out of 5 stars'">
+                    @for (s of getStars(t.rating); track s) {
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
+                        <path
+                            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    }
                 </div>
-                <cite class="testimonial-card__name">{{ t.clientName }}</cite>
-            </footer>
-        </article>
-        }
+
+                <blockquote class="testimonial-card__body">{{ t.quote }}</blockquote>
+
+                <footer class="testimonial-card__footer">
+                    <div class="testimonial-card__avatar" aria-hidden="true">{{ t.clientName.charAt(0) }}</div>
+                    <cite class="testimonial-card__name">{{ t.clientName }}</cite>
+                </footer>
+            </article>
+            }
+        </div>
     </div>
 
 </section>

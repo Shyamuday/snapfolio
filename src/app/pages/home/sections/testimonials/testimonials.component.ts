@@ -11,6 +11,7 @@ import { PortfolioService } from '../../../../core/services/portfolio.service';
 export class TestimonialsComponent {
     private portfolioService = inject(PortfolioService);
     testimonials = this.portfolioService.testimonials;
+    doubled = [...this.testimonials, ...this.testimonials];
 
     getStars(rating: number): number[] {
         return Array.from({ length: rating }, (_, i) => i);

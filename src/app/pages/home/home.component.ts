@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { CarouselComponent, CarouselSlide } from '../../shared/carousel/carousel.component';
-import { FeaturedWorkComponent } from './sections/featured-work/featured-work.component';
 import { PhilosophyComponent } from './sections/philosophy/philosophy.component';
-import { OurWorkComponent } from './sections/our-work/our-work.component';
 import { ServicesComponent } from './sections/services/services.component';
 import { TestimonialsComponent } from './sections/testimonials/testimonials.component';
 import { IMAGES } from '../../core/config/image-paths';
@@ -13,9 +11,7 @@ import { IMAGES } from '../../core/config/image-paths';
     standalone: true,
     imports: [
         CarouselComponent,
-        FeaturedWorkComponent,
         PhilosophyComponent,
-        OurWorkComponent,
         ServicesComponent,
         TestimonialsComponent,
     ],
