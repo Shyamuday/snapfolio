@@ -13,19 +13,6 @@
 
             <!-- Ken Burns image -->
             <img [src]="slide.image" [alt]="slide.title" class="carousel__img" loading="lazy" />
-
-            <!-- Text overlay -->
-            <div class="carousel__overlay">
-                <div class="carousel__text" [attr.data-key]="animKey()">
-                    <p class="carousel__subtitle" [class.animate]="i === activeIndex()">
-                        {{ slide.subtitle }}
-                    </p>
-                    <h3 class="carousel__title" [class.animate]="i === activeIndex()">
-                        {{ slide.title }}
-                    </h3>
-                    <div class="carousel__line" [class.animate]="i === activeIndex()"></div>
-                </div>
-            </div>
         </div>
         }
     </div>
