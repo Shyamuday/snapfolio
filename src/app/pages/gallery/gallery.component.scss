@@ -87,7 +87,7 @@
 
 .photo-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 
   @include tablet {
@@ -105,20 +105,47 @@
   cursor: pointer;
   overflow: hidden;
   border-radius: 4px;
-  background: none;
+  background: #e8e0d5;
   display: block;
   width: 100%;
+  aspect-ratio: 4 / 3;
+  position: relative;
+
+  .photo-skeleton {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #e8e0d5 25%, #f5f0eb 50%, #e8e0d5 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s infinite linear;
+    border-radius: 4px;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+  }
 
   img {
     width: 100%;
-    height: 250px;
+    height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
     display: block;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.3s ease;
   }
 
   &:hover img {
     transform: scale(1.05);
+  }
+
+  &.loaded {
+    .photo-skeleton {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    img {
+      opacity: 1;
+    }
   }
 }
 
@@ -190,4 +217,71 @@
     border-color: #1a1a1a;
     color: #fff;
   }
+}
+
+// ── Breadcrumb ────────────────────────────────────────────────────────────────
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.82rem;
+
+  &__item {
+    &--link {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #888;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #1a1a1a;
+        text-decoration: underline;
+      }
+    }
+
+    &--current {
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+  }
+
+  &__sep {
+    color: #bbb;
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 1rem;
+  color: #aaa;
+  text-align: center;
+
+  svg {
+    opacity: 0.4;
+  }
+
+  p {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+// ── Photo skeleton shimmer ────────────────────────────────────────────────────
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
 }

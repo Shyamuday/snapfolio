@@ -1,7 +1,8 @@
 <div class="album-cover">
     @for (photo of album().photos; track photo.id; let i = $index) {
     <img class="album-cover__slide" [class.active]="i === activeIndex()" [src]="photo.filename" [alt]="photo.title"
-        loading="lazy" />
+        width="400" height="220" [loading]="i === 0 ? 'eager' : 'lazy'"
+        [attr.fetchpriority]="i === 0 ? 'high' : 'low'" />
     }
 
     @if (showType()) {

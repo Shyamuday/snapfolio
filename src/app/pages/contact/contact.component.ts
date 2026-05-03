@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { IMAGES } from '../../core/config/image-paths';
 
@@ -11,6 +11,7 @@ import { IMAGES } from '../../core/config/image-paths';
 })
 export class ContactComponent {
     readonly image = IMAGES.photoMarriage;
+    imageLoaded = signal(false);
 
     readonly contactItems = [
         { icon: 'phone', label: 'Call Us', value: '+91 98765 43210', href: 'tel:+919876543210' },
@@ -25,6 +26,15 @@ export class ContactComponent {
 
     constructor(private title: Title, private meta: Meta) {
         this.title.setTitle('Contact | Snapfolio');
-        this.meta.updateTag({ name: 'description', content: 'Get in touch to book a session or inquire about prints.' });
+        this.meta.updateTag({ name: 'description', content: 'Get in touch with Aditya to book a photography session, commission a print, or just say hello. Based in Pune, India.' });
+        this.meta.updateTag({ property: 'og:title', content: 'Contact Aditya | Snapfolio' });
+        this.meta.updateTag({ property: 'og:description', content: 'Book a session or inquire about prints. Based in Pune, India.' });
+        this.meta.updateTag({ property: 'og:type', content: 'website' });
+        this.meta.updateTag({ property: 'og:url', content: 'https://adityadeshmukhphotgraphy.netlify.app/contact' });
+        this.meta.updateTag({ property: 'og:image', content: 'https://adityadeshmukhphotgraphy.netlify.app/assets/images/photo-marriage.jpg' });
+        this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+        this.meta.updateTag({ name: 'twitter:title', content: 'Contact Aditya | Snapfolio' });
+        this.meta.updateTag({ name: 'twitter:description', content: 'Book a photography session or inquire about prints.' });
+        this.meta.updateTag({ name: 'twitter:image', content: 'https://adityadeshmukhphotgraphy.netlify.app/assets/images/photo-marriage.jpg' });
     }
 }

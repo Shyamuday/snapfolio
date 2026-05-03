@@ -28,9 +28,16 @@ export class AboutComponent {
 
     constructor(private titleService: Title, private metaService: Meta) {
         this.titleService.setTitle('About | Snapfolio');
-        this.metaService.updateTag({ name: 'description', content: 'Hi, I am Aditya - a professional photographer.' });
-        this.metaService.updateTag({ property: 'og:title', content: 'About | Snapfolio' });
-        this.metaService.updateTag({ property: 'og:description', content: 'Professional photographer specialising in weddings, fashion, and travel.' });
+        this.metaService.updateTag({ name: 'description', content: 'Meet Aditya — a professional photographer with 12 years of experience in weddings, fashion, travel, and nature photography based in Pune, India.' });
+        this.metaService.updateTag({ property: 'og:title', content: 'About Aditya | Snapfolio' });
+        this.metaService.updateTag({ property: 'og:description', content: 'Professional photographer specialising in weddings, fashion, travel, and nature. Based in Pune, India.' });
+        this.metaService.updateTag({ property: 'og:type', content: 'profile' });
+        this.metaService.updateTag({ property: 'og:url', content: 'https://adityadeshmukhphotgraphy.netlify.app/about' });
+        this.metaService.updateTag({ property: 'og:image', content: 'https://adityadeshmukhphotgraphy.netlify.app/assets/images/photo-image-1.JPG' });
+        this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+        this.metaService.updateTag({ name: 'twitter:title', content: 'About Aditya | Snapfolio' });
+        this.metaService.updateTag({ name: 'twitter:description', content: 'Professional photographer specialising in weddings, fashion, travel, and nature.' });
+        this.metaService.updateTag({ name: 'twitter:image', content: 'https://adityadeshmukhphotgraphy.netlify.app/assets/images/photo-image-1.JPG' });
     }
 
     get about() {

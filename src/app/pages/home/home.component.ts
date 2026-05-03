@@ -35,9 +35,14 @@ export class HomeComponent {
         this.meta.updateTag({ property: 'og:title', content: 'Snapfolio | Photography Portfolio' });
         this.meta.updateTag({
             property: 'og:description',
-            content:
-                'Snapfolio — professional photography portfolio showcasing landscapes, portraits, nature, and events.',
+            content: 'Snapfolio — professional photography portfolio showcasing landscapes, portraits, nature, and events.',
         });
         this.meta.updateTag({ property: 'og:type', content: 'website' });
+        this.meta.updateTag({ property: 'og:url', content: 'https://adityadeshmukhphotgraphy.netlify.app' });
+        this.meta.updateTag({ property: 'og:image', content: 'https://adityadeshmukhphotgraphy.netlify.app/assets/images/golden-hour.jpg' });
+        this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+        this.meta.updateTag({ name: 'twitter:title', content: 'Snapfolio | Photography Portfolio' });
+        this.meta.updateTag({ name: 'twitter:description', content: 'Professional photography portfolio — landscapes, portraits, nature, and events.' });
+        this.meta.updateTag({ name: 'twitter:image', content: 'https://adityadeshmukhphotgraphy.netlify.app/assets/images/golden-hour.jpg' });
     }
 }
