@@ -1,6 +1,7 @@
 <main class="gallery-page">
     <h1 class="gallery-heading">Gallery</h1>
 
+    <!-- Category filter -->
     <div class="filter-bar">
         <button class="filter-btn" [class.active]="activeCategory() === 'All'" (click)="setCategory('All')">
             All
@@ -12,6 +13,64 @@
         }
     </div>
 
+    <!-- Event subcategory chips -->
+    @if (isEventsActive()) {
+    <div class="subcategory-bar">
+        <button class="subcategory-btn" [class.active]="activeSubcategory() === 'All'" (click)="setSubcategory('All')">
+            All Events
+        </button>
+        @for (sub of portfolioService.eventSubcategories; track sub) {
+        <button class="subcategory-btn" [class.active]="activeSubcategory() === sub" (click)="setSubcategory(sub)">
+            {{ sub }}
+        </button>
+        }
+    </div>
+    }
+
+    <!-- Album grid (shown when a subcategory is selected and no album is open) -->
+    @if (isSubcategoryActive() && !activeAlbum()) {
+    <div class="album-grid">
+        @for (album of albumsForSubcategory(); track album.id) {
+        <button class="album-card" (click)="openAlbum(album)">
+            <div class="album-card__cover">
+                <img [src]="album.coverFilename" [alt]="album.name" loading="lazy" />
+                <div class="album-card__overlay">
+                    <span class="album-card__count">{{ album.photos.length }} photos</span>
+                </div>
+            </div>
+            <p class="album-card__name">{{ album.name }}</p>
+        </button>
+        }
+    </div>
+    }
+
+    <!-- Album detail view -->
+    @if (activeAlbum()) {
+    <div class="album-detail">
+        <div class="album-detail__header">
+            <button class="back-btn" (click)="closeAlbum()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round" width="18" height="18">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                Back to {{ activeSubcategory() }}
+            </button>
+            <h2 class="album-detail__title">{{ activeAlbum()!.name }}</h2>
+        </div>
+
+        <div class="photo-grid">
+            @for (photo of filteredPhotos(); track photo.id; let i = $index) {
+            <button class="photo-item" (click)="openLightbox(i, $event)">
+                <img [src]="photo.filename" [alt]="photo.title" loading="lazy" />
+            </button>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- Regular photo grid (non-events or All Events) -->
+    @if (!isSubcategoryActive() || (isSubcategoryActive() && !activeAlbum() && albumsForSubcategory().length === 0)) {
+    @if (!activeAlbum()) {
     <div class="photo-grid">
         @for (photo of filteredPhotos(); track photo.id; let i = $index) {
         <button class="photo-item" (click)="openLightbox(i, $event)">
@@ -19,6 +78,8 @@
         </button>
         }
     </div>
+    }
+    }
 
     @if (lightboxIndex() !== null) {
     <app-lightbox [photos]="filteredPhotos()" [activeIndex]="lightboxIndex()!" (close)="closeLightbox()" />

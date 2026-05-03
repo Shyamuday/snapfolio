@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { CarouselComponent, CarouselSlide } from '../../shared/carousel/carousel.component';
-import { PhilosophyComponent } from './sections/philosophy/philosophy.component';
 import { ServicesComponent } from './sections/services/services.component';
 import { TestimonialsComponent } from './sections/testimonials/testimonials.component';
 import { IMAGES } from '../../core/config/image-paths';
@@ -11,7 +10,6 @@ import { IMAGES } from '../../core/config/image-paths';
     standalone: true,
     imports: [
         CarouselComponent,
-        PhilosophyComponent,
         ServicesComponent,
         TestimonialsComponent,
     ],

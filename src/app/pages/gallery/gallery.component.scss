@@ -21,7 +21,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .filter-btn {
@@ -44,6 +44,39 @@
   &.active {
     background: #e8e0d5;
     color: #1a1a1a;
+  }
+}
+
+.subcategory-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 2rem;
+  padding-left: 0.25rem;
+}
+
+.subcategory-btn {
+  padding: 0.4rem 1rem;
+  min-height: 36px;
+  border: 1.5px solid #c8b8a2;
+  border-radius: 20px;
+  background: transparent;
+  color: #555;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+
+  &:hover {
+    background: #f0e8dc;
+    border-color: #a89070;
+    color: #1a1a1a;
+  }
+
+  &.active {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #fff;
   }
 }
 
@@ -81,5 +114,122 @@
 
   &:hover img {
     transform: scale(1.05);
+  }
+}
+
+// ── Album grid ────────────────────────────────────────────────────────────────
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+
+  @include tablet {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include desktop {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.album-card {
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 8px;
+  overflow: hidden;
+
+  &__cover {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%);
+    display: flex;
+    align-items: flex-end;
+    padding: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  &__count {
+    font-size: 0.78rem;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  &__name {
+    margin: 0.6rem 0 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &:hover {
+    .album-card__cover img {
+      transform: scale(1.06);
+    }
+
+    .album-card__overlay {
+      opacity: 1;
+    }
+  }
+}
+
+// ── Album detail ──────────────────────────────────────────────────────────────
+.album-detail {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__title {
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+  }
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1.5px solid #c8b8a2;
+  border-radius: 20px;
+  background: transparent;
+  color: #555;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #fff;
   }
 }

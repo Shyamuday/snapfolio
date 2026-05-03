@@ -2,14 +2,25 @@
 import { IMAGES } from '../config/image-paths';
 
 export type PhotoCategory = 'Landscape' | 'Nature' | 'Portrait' | 'Events';
+export type EventSubcategory = 'Marriage' | 'Birthday' | 'Party' | 'Corporate';
 
 export interface Photo {
     id: number;
     title: string;
     category: PhotoCategory;
+    subcategory?: EventSubcategory;
+    albumId?: number;
     description: string;
-    filename: string; // full path via IMAGES
+    filename: string;
     featured?: boolean;
+}
+
+export interface EventAlbum {
+    id: number;
+    name: string;
+    subcategory: EventSubcategory;
+    coverFilename: string;
+    photos: Photo[];
 }
 
 export interface Testimonial {
@@ -60,8 +71,31 @@ export const PHOTOS: Photo[] = [
     { id: 8, title: 'Golden Hour', category: 'Nature', description: 'Nature transformed by the warm, fleeting glow of golden hour light.', filename: IMAGES.goldenHour },
     { id: 9, title: 'Portrait Study I', category: 'Portrait', description: 'An intimate portrait capturing authentic emotion and character.', filename: IMAGES.photoImage1, featured: true },
     { id: 10, title: 'Portrait Study II', category: 'Portrait', description: "A striking portrait that reveals the depth behind the subject's gaze.", filename: IMAGES.photoImage2, featured: true },
-    { id: 11, title: 'Wedding Celebration', category: 'Events', description: 'A joyful moment frozen in time from a beautiful wedding ceremony.', filename: IMAGES.photoMarriage },
+    { id: 11, title: 'Wedding Celebration', category: 'Events', subcategory: 'Marriage', albumId: 1, description: 'A joyful moment frozen in time from a beautiful wedding ceremony.', filename: IMAGES.photoMarriage },
     { id: 12, title: 'Waterfall Majesty', category: 'Nature', description: 'The raw power and beauty of a cascading waterfall in full flow.', filename: IMAGES.waterfallMajesty },
+    { id: 13, title: 'Wedding Vows', category: 'Events', subcategory: 'Marriage', albumId: 1, description: 'An emotional exchange of vows captured in perfect light.', filename: IMAGES.photoMarriage },
+    { id: 14, title: 'Birthday Bash', category: 'Events', subcategory: 'Birthday', albumId: 4, description: 'Candid moments from a vibrant birthday celebration full of laughter.', filename: IMAGES.goldenHour },
+    { id: 15, title: 'Birthday Portraits', category: 'Events', subcategory: 'Birthday', albumId: 4, description: 'Joyful portraits from a milestone birthday party.', filename: IMAGES.photoImage1 },
+    { id: 16, title: 'Evening Party', category: 'Events', subcategory: 'Party', albumId: 6, description: 'The energy and atmosphere of a lively evening gathering.', filename: IMAGES.forestWhispers },
+    { id: 17, title: 'Celebration Night', category: 'Events', subcategory: 'Party', albumId: 6, description: 'Guests enjoying a beautifully decorated celebration venue.', filename: IMAGES.springBloom },
+    { id: 18, title: 'Corporate Summit', category: 'Events', subcategory: 'Corporate', albumId: 8, description: 'Professional coverage of a high-profile corporate summit.', filename: IMAGES.mountainDreams },
+    { id: 19, title: 'Team Headshots', category: 'Events', subcategory: 'Corporate', albumId: 8, description: 'Clean, professional headshots for a growing company team.', filename: IMAGES.photoImage2 },
+    // Marriage album 2
+    { id: 20, title: 'Reception Dance', category: 'Events', subcategory: 'Marriage', albumId: 2, description: 'The first dance at a magical evening reception.', filename: IMAGES.photoMarriage },
+    { id: 21, title: 'Bridal Portrait', category: 'Events', subcategory: 'Marriage', albumId: 2, description: 'A stunning bridal portrait in natural light.', filename: IMAGES.photoImage1 },
+    { id: 22, title: 'Garden Ceremony', category: 'Events', subcategory: 'Marriage', albumId: 2, description: 'An intimate garden ceremony surrounded by blooms.', filename: IMAGES.springBloom },
+    // Marriage album 3
+    { id: 23, title: 'Sunset Vows', category: 'Events', subcategory: 'Marriage', albumId: 3, description: 'Vows exchanged as the sun dipped below the horizon.', filename: IMAGES.goldenHour },
+    { id: 24, title: 'Couple Portrait', category: 'Events', subcategory: 'Marriage', albumId: 3, description: 'A tender couple portrait after the ceremony.', filename: IMAGES.photoImage2 },
+    // Birthday album 2
+    { id: 25, title: 'Cake Cutting', category: 'Events', subcategory: 'Birthday', albumId: 5, description: 'The big moment — cutting the birthday cake.', filename: IMAGES.springBloom },
+    { id: 26, title: 'Party Crowd', category: 'Events', subcategory: 'Birthday', albumId: 5, description: 'Friends and family gathered for a surprise birthday.', filename: IMAGES.forestWhispers },
+    // Party album 2
+    { id: 27, title: 'Rooftop Gathering', category: 'Events', subcategory: 'Party', albumId: 7, description: 'A stylish rooftop party with city views.', filename: IMAGES.summitGlory },
+    { id: 28, title: 'Dance Floor', category: 'Events', subcategory: 'Party', albumId: 7, description: 'Guests dancing the night away.', filename: IMAGES.goldenHour },
+    // Corporate album 2
+    { id: 29, title: 'Product Launch', category: 'Events', subcategory: 'Corporate', albumId: 9, description: 'Capturing the energy of a major product launch event.', filename: IMAGES.oceanSerenity },
+    { id: 30, title: 'Conference Panel', category: 'Events', subcategory: 'Corporate', albumId: 9, description: 'Industry leaders on stage at an annual conference.', filename: IMAGES.mountainDreams },
 ];
 
 export const TESTIMONIALS: Testimonial[] = [
@@ -83,6 +117,45 @@ export const WORK_CATEGORIES: WorkCategory[] = [
     { category: 'Nature', coverFilename: IMAGES.forestWhispers, label: 'Nature' },
     { category: 'Portrait', coverFilename: IMAGES.photoImage1, label: 'Portrait' },
     { category: 'Events', coverFilename: IMAGES.photoMarriage, label: 'Events' },
+];
+
+export const EVENT_ALBUMS: EventAlbum[] = [
+    {
+        id: 1, name: 'Sarah & James', subcategory: 'Marriage', coverFilename: IMAGES.photoMarriage,
+        photos: PHOTOS.filter(p => p.albumId === 1),
+    },
+    {
+        id: 2, name: 'Priya & Rohan', subcategory: 'Marriage', coverFilename: IMAGES.photoImage1,
+        photos: PHOTOS.filter(p => p.albumId === 2),
+    },
+    {
+        id: 3, name: 'Elena & Marco', subcategory: 'Marriage', coverFilename: IMAGES.goldenHour,
+        photos: PHOTOS.filter(p => p.albumId === 3),
+    },
+    {
+        id: 4, name: "Aisha's 25th", subcategory: 'Birthday', coverFilename: IMAGES.goldenHour,
+        photos: PHOTOS.filter(p => p.albumId === 4),
+    },
+    {
+        id: 5, name: "David's Surprise", subcategory: 'Birthday', coverFilename: IMAGES.springBloom,
+        photos: PHOTOS.filter(p => p.albumId === 5),
+    },
+    {
+        id: 6, name: 'New Year Bash', subcategory: 'Party', coverFilename: IMAGES.forestWhispers,
+        photos: PHOTOS.filter(p => p.albumId === 6),
+    },
+    {
+        id: 7, name: 'Rooftop Soirée', subcategory: 'Party', coverFilename: IMAGES.summitGlory,
+        photos: PHOTOS.filter(p => p.albumId === 7),
+    },
+    {
+        id: 8, name: 'TechCorp Summit 2024', subcategory: 'Corporate', coverFilename: IMAGES.mountainDreams,
+        photos: PHOTOS.filter(p => p.albumId === 8),
+    },
+    {
+        id: 9, name: 'Nexus Product Launch', subcategory: 'Corporate', coverFilename: IMAGES.oceanSerenity,
+        photos: PHOTOS.filter(p => p.albumId === 9),
+    },
 ];
 
 export const ABOUT_CONTENT: AboutContent = {
