@@ -3,7 +3,7 @@ import {
     signal, inject, PLATFORM_ID
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { EventAlbum } from '../../core/data/portfolio.data';
+import { Album } from '../../core/data/portfolio.data';
 
 @Component({
     selector: 'app-album-card',
@@ -14,7 +14,7 @@ import { EventAlbum } from '../../core/data/portfolio.data';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlbumCardComponent implements OnInit, OnDestroy {
-    album = input.required<EventAlbum>();
+    album = input.required<Album>();
     showType = input<boolean>(false);
 
     private readonly platformId = inject(PLATFORM_ID);

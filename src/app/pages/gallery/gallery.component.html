@@ -13,13 +13,13 @@
             }
         </div>
 
-        @if (isEventsActive()) {
+        @if (isCategoryActive()) {
         <div class="subcategory-bar">
             <button class="subcategory-btn" [class.active]="activeSubcategory() === 'All'"
                 (click)="setSubcategory('All')">
-                All Events
+                All {{ activeCategory() }}
             </button>
-            @for (sub of portfolioService.eventSubcategories; track sub) {
+            @for (sub of subcategoriesForCategory(); track sub) {
             <button class="subcategory-btn" [class.active]="activeSubcategory() === sub" (click)="setSubcategory(sub)">
                 {{ sub }}
             </button>
@@ -28,10 +28,10 @@
         }
     </div>
 
-    <!-- Album grid (shown whenever Events is active and no album is open) -->
-    @if (isEventsActive() && !activeAlbum()) {
+    <!-- Album grid (shown when a category is selected and no album is open) -->
+    @if (isCategoryActive() && !activeAlbum()) {
     <div class="album-grid">
-        @for (album of albumsForSubcategory(); track album.id) {
+        @for (album of albumsForView(); track album.id) {
         <button class="album-card" (click)="openAlbum(album)">
             <app-album-card [album]="album" [showType]="activeSubcategory() === 'All'" />
         </button>
@@ -48,7 +48,7 @@
                     stroke-linejoin="round" width="18" height="18">
                     <polyline points="15 18 9 12 15 6" />
                 </svg>
-                Back to {{ activeSubcategory() }}
+                Back to {{ activeSubcategory() === 'All' ? activeCategory() : activeSubcategory() }}
             </button>
             <h2 class="album-detail__title">{{ activeAlbum()!.name }}</h2>
         </div>
@@ -63,8 +63,8 @@
     </div>
     }
 
-    <!-- Regular photo grid (non-events categories) -->
-    @if (!isEventsActive()) {
+    <!-- Flat photo grid (only for "All" category) -->
+    @if (!isCategoryActive()) {
     <div class="photo-grid">
         @for (photo of filteredPhotos(); track photo.id; let i = $index) {
         <button class="photo-item" (click)="openLightbox(i, $event)">

@@ -4,7 +4,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { PortfolioService } from '../../core/services/portfolio.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
 import { AlbumCardComponent } from '../../shared/album-card/album-card.component';
-import { EventSubcategory, EventAlbum, Photo } from '../../core/data/portfolio.data';
+import { Album, Photo, PhotoCategory, PhotoSubcategory } from '../../core/data/portfolio.data';
 
 @Component({
     selector: 'app-gallery',
@@ -19,34 +19,32 @@ export class GalleryComponent implements OnInit {
     private readonly titleService = inject(Title);
     private readonly metaService = inject(Meta);
 
-    activeCategory = signal<string>('All');
-    activeSubcategory = signal<EventSubcategory | 'All'>('All');
-    activeAlbum = signal<EventAlbum | null>(null);
+    activeCategory = signal<PhotoCategory | 'All'>('All');
+    activeSubcategory = signal<PhotoSubcategory | 'All'>('All');
+    activeAlbum = signal<Album | null>(null);
 
-    isEventsActive = computed(() => this.activeCategory() === 'Events');
-    isSubcategoryActive = computed(() => this.isEventsActive() && this.activeSubcategory() !== 'All');
+    // Whether the selected category uses the album/subcategory system (all non-All categories)
+    isCategoryActive = computed(() => this.activeCategory() !== 'All');
 
-    albumsForSubcategory = computed(() => {
+    subcategoriesForCategory = computed(() => {
+        const cat = this.activeCategory();
+        if (cat === 'All') return [];
+        return this.portfolioService.getSubcategories(cat);
+    });
+
+    albumsForView = computed(() => {
+        const cat = this.activeCategory();
         const sub = this.activeSubcategory();
-        if (sub === 'All') return this.portfolioService.eventAlbums;
-        return this.portfolioService.getAlbumsBySubcategory(sub);
+        if (cat === 'All') return [];
+        if (sub === 'All') return this.portfolioService.getAlbumsByCategory(cat);
+        return this.portfolioService.getAlbumsByCategoryAndSubcategory(cat, sub as PhotoSubcategory);
     });
 
     filteredPhotos = computed((): Photo[] => {
         const album = this.activeAlbum();
         if (album) return album.photos;
-
-        const cat = this.activeCategory();
-        const sub = this.activeSubcategory();
-
-        let photos = cat === 'All'
-            ? this.portfolioService.photos
-            : this.portfolioService.photos.filter(p => p.category === cat);
-
-        if (cat === 'Events' && sub !== 'All') {
-            photos = photos.filter(p => p.subcategory === sub);
-        }
-        return photos;
+        // Only used for "All" category flat view
+        return this.portfolioService.photos;
     });
 
     lightboxIndex = signal<number | null>(null);
@@ -62,22 +60,22 @@ export class GalleryComponent implements OnInit {
     ngOnInit(): void {
         const category = this.route.snapshot.queryParams['category'];
         if (category) {
-            this.activeCategory.set(category);
+            this.activeCategory.set(category as PhotoCategory);
         }
     }
 
-    setCategory(cat: string): void {
+    setCategory(cat: PhotoCategory | 'All'): void {
         this.activeCategory.set(cat);
         this.activeSubcategory.set('All');
         this.activeAlbum.set(null);
     }
 
-    setSubcategory(sub: EventSubcategory | 'All'): void {
+    setSubcategory(sub: PhotoSubcategory | 'All'): void {
         this.activeSubcategory.set(sub);
         this.activeAlbum.set(null);
     }
 
-    openAlbum(album: EventAlbum): void {
+    openAlbum(album: Album): void {
         this.activeAlbum.set(album);
         this.lightboxIndex.set(null);
     }

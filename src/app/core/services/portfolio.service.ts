@@ -2,18 +2,19 @@ import { Injectable } from '@angular/core';
 import {
     Photo,
     PhotoCategory,
-    EventSubcategory,
-    EventAlbum,
+    PhotoSubcategory,
+    Album,
     Testimonial,
     Service,
     WorkCategory,
     AboutContent,
     PhilosophyContent,
     PHOTOS,
+    ALBUMS,
     TESTIMONIALS,
     SERVICES,
     WORK_CATEGORIES,
-    EVENT_ALBUMS,
+    SUBCATEGORIES,
     ABOUT_CONTENT,
     PHILOSOPHY_CONTENT,
 } from '../data/portfolio.data';
@@ -24,11 +25,14 @@ export class PortfolioService {
     readonly testimonials: Testimonial[] = TESTIMONIALS;
     readonly services: Service[] = SERVICES;
     readonly workCategories: WorkCategory[] = WORK_CATEGORIES;
-    readonly eventAlbums: EventAlbum[] = EVENT_ALBUMS;
+    readonly albums: Album[] = ALBUMS;
     readonly aboutContent: AboutContent = ABOUT_CONTENT;
     readonly philosophyContent: PhilosophyContent = PHILOSOPHY_CONTENT;
 
-    readonly eventSubcategories: EventSubcategory[] = ['Marriage', 'Birthday', 'Party', 'Corporate'];
+    // Backward compat
+    get eventAlbums(): Album[] {
+        return this.albums.filter(a => a.category === 'Events');
+    }
 
     get featuredPhotos(): Photo[] {
         return this.photos.filter(p => p.featured === true);
@@ -38,7 +42,15 @@ export class PortfolioService {
         return [...new Set(this.workCategories.map(wc => wc.category))];
     }
 
-    getAlbumsBySubcategory(sub: EventSubcategory): EventAlbum[] {
-        return this.eventAlbums.filter(a => a.subcategory === sub);
+    getSubcategories(cat: PhotoCategory): PhotoSubcategory[] {
+        return SUBCATEGORIES[cat] ?? [];
+    }
+
+    getAlbumsByCategory(cat: PhotoCategory): Album[] {
+        return this.albums.filter(a => a.category === cat);
+    }
+
+    getAlbumsByCategoryAndSubcategory(cat: PhotoCategory, sub: PhotoSubcategory): Album[] {
+        return this.albums.filter(a => a.category === cat && a.subcategory === sub);
     }
 }
