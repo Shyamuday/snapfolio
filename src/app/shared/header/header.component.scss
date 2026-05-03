@@ -36,15 +36,19 @@ $transition: 0.25s ease;
 
 // ─── Brand / Logo ────────────────────────────────────────────────────────────
 .brand {
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: $text-color;
-  text-transform: uppercase;
-  transition: color $transition;
+  display: flex;
+  align-items: center;
+  transition: opacity $transition;
 
   &:hover {
-    color: $accent;
+    opacity: 0.85;
+  }
+
+  &__logo {
+    height: 72px;
+    width: auto;
+    display: block;
+    filter: invert(1);
   }
 }
 
