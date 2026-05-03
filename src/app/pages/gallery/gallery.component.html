@@ -32,13 +32,7 @@
     <div class="album-grid">
         @for (album of albumsForSubcategory(); track album.id) {
         <button class="album-card" (click)="openAlbum(album)">
-            <div class="album-card__cover">
-                <img [src]="album.coverFilename" [alt]="album.name" loading="lazy" />
-                <div class="album-card__overlay">
-                    <span class="album-card__count">{{ album.photos.length }} photos</span>
-                </div>
-            </div>
-            <p class="album-card__name">{{ album.name }}</p>
+            <app-album-card [album]="album" />
         </button>
         }
     </div>

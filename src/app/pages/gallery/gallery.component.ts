@@ -3,12 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { PortfolioService } from '../../core/services/portfolio.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
+import { AlbumCardComponent } from '../../shared/album-card/album-card.component';
 import { EventSubcategory, EventAlbum, Photo } from '../../core/data/portfolio.data';
 
 @Component({
     selector: 'app-gallery',
     standalone: true,
-    imports: [LightboxComponent],
+    imports: [LightboxComponent, AlbumCardComponent],
     templateUrl: './gallery.component.html',
     styleUrl: './gallery.component.scss',
 })

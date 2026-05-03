@@ -1,0 +1,18 @@
+<div class="album-cover">
+    @for (photo of album.photos; track photo.id; let i = $index) {
+    <img class="album-cover__slide" [class.active]="i === activeIndex()" [src]="photo.filename" [alt]="photo.title"
+        loading="lazy" />
+    }
+    <div class="album-cover__overlay">
+        <span class="album-cover__count">{{ album.photos.length }} photos</span>
+    </div>
+    <!-- dot indicators -->
+    @if (album.photos.length > 1) {
+    <div class="album-cover__dots">
+        @for (photo of album.photos; track photo.id; let i = $index) {
+        <span class="album-cover__dot" [class.active]="i === activeIndex()"></span>
+        }
+    </div>
+    }
+</div>
+<p class="album-cover__name">{{ album.name }}</p>
