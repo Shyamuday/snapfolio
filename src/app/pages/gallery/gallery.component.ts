@@ -28,7 +28,7 @@ export class GalleryComponent implements OnInit {
 
     albumsForSubcategory = computed(() => {
         const sub = this.activeSubcategory();
-        if (sub === 'All') return [];
+        if (sub === 'All') return this.portfolioService.eventAlbums;
         return this.portfolioService.getAlbumsBySubcategory(sub);
     });
 

@@ -19,6 +19,21 @@
     }
   }
 
+  &__type-badge {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.75rem;
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 2;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  }
+
   &__overlay {
     position: absolute;
     inset: 0;

@@ -1,68 +1,73 @@
 @use 'styles' as *;
 
 .gallery-page {
-  padding: 2rem 1rem;
+  padding: 1rem;
   max-width: 1400px;
   margin: 0 auto;
 
   @include tablet {
-    padding: 3rem 2rem;
+    padding: 1.5rem 2rem;
   }
 }
 
 .gallery-heading {
   font-size: clamp(1.5rem, 5vw, 2.5rem);
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   color: #1a1a1a;
+}
+
+.filter-area {
+  margin-bottom: 1.5rem;
 }
 
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.4rem;
+  margin-bottom: 0;
 }
 
 .filter-btn {
-  padding: 0.625rem 1.25rem;
-  min-height: 44px;
-  border: 2px solid #e8e0d5;
+  padding: 0.4rem 1rem;
+  min-height: 36px;
+  border: 1.5px solid #c8b8a2;
   border-radius: 4px;
   background: transparent;
   color: #1a1a1a;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 
   &:hover {
     background: #e8e0d5;
-    color: #1a1a1a;
   }
 
   &.active {
-    background: #e8e0d5;
-    color: #1a1a1a;
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #fff;
   }
 }
 
 .subcategory-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 2rem;
-  padding-left: 0.25rem;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 2px solid #e8e0d5;
 }
 
 .subcategory-btn {
-  padding: 0.4rem 1rem;
-  min-height: 36px;
-  border: 1.5px solid #c8b8a2;
+  padding: 0.3rem 0.85rem;
+  min-height: 30px;
+  border: 1.5px solid #d4c4b0;
   border-radius: 20px;
   background: transparent;
-  color: #555;
-  font-size: 0.82rem;
+  color: #666;
+  font-size: 0.78rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;

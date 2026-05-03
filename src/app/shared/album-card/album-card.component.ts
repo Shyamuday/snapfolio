@@ -1,5 +1,5 @@
 import {
-    Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy,
+    Component, input, OnInit, OnDestroy, ChangeDetectionStrategy,
     signal, inject, PLATFORM_ID
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
@@ -14,21 +14,18 @@ import { EventAlbum } from '../../core/data/portfolio.data';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlbumCardComponent implements OnInit, OnDestroy {
-    @Input({ required: true }) album!: EventAlbum;
+    album = input.required<EventAlbum>();
+    showType = input<boolean>(false);
 
     private readonly platformId = inject(PLATFORM_ID);
 
     activeIndex = signal(0);
     private timer: ReturnType<typeof setInterval> | null = null;
 
-    get photos() {
-        return this.album.photos.length > 0 ? this.album.photos : null;
-    }
-
     ngOnInit(): void {
-        if (isPlatformBrowser(this.platformId) && this.album.photos.length > 1) {
+        if (isPlatformBrowser(this.platformId) && this.album().photos.length > 1) {
             this.timer = setInterval(() => {
-                this.activeIndex.update(i => (i + 1) % this.album.photos.length);
+                this.activeIndex.update(i => (i + 1) % this.album().photos.length);
             }, 2500);
         }
     }

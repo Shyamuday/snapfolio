@@ -1,38 +1,39 @@
 <main class="gallery-page">
-    <h1 class="gallery-heading">Gallery</h1>
 
-    <!-- Category filter -->
-    <div class="filter-bar">
-        <button class="filter-btn" [class.active]="activeCategory() === 'All'" (click)="setCategory('All')">
-            All
-        </button>
-        @for (cat of portfolioService.categories; track cat) {
-        <button class="filter-btn" [class.active]="activeCategory() === cat" (click)="setCategory(cat)">
-            {{ cat }}
-        </button>
+    <!-- Filter area -->
+    <div class="filter-area">
+        <div class="filter-bar">
+            <button class="filter-btn" [class.active]="activeCategory() === 'All'" (click)="setCategory('All')">
+                All
+            </button>
+            @for (cat of portfolioService.categories; track cat) {
+            <button class="filter-btn" [class.active]="activeCategory() === cat" (click)="setCategory(cat)">
+                {{ cat }}
+            </button>
+            }
+        </div>
+
+        @if (isEventsActive()) {
+        <div class="subcategory-bar">
+            <button class="subcategory-btn" [class.active]="activeSubcategory() === 'All'"
+                (click)="setSubcategory('All')">
+                All Events
+            </button>
+            @for (sub of portfolioService.eventSubcategories; track sub) {
+            <button class="subcategory-btn" [class.active]="activeSubcategory() === sub" (click)="setSubcategory(sub)">
+                {{ sub }}
+            </button>
+            }
+        </div>
         }
     </div>
 
-    <!-- Event subcategory chips -->
-    @if (isEventsActive()) {
-    <div class="subcategory-bar">
-        <button class="subcategory-btn" [class.active]="activeSubcategory() === 'All'" (click)="setSubcategory('All')">
-            All Events
-        </button>
-        @for (sub of portfolioService.eventSubcategories; track sub) {
-        <button class="subcategory-btn" [class.active]="activeSubcategory() === sub" (click)="setSubcategory(sub)">
-            {{ sub }}
-        </button>
-        }
-    </div>
-    }
-
-    <!-- Album grid (shown when a subcategory is selected and no album is open) -->
-    @if (isSubcategoryActive() && !activeAlbum()) {
+    <!-- Album grid (shown whenever Events is active and no album is open) -->
+    @if (isEventsActive() && !activeAlbum()) {
     <div class="album-grid">
         @for (album of albumsForSubcategory(); track album.id) {
         <button class="album-card" (click)="openAlbum(album)">
-            <app-album-card [album]="album" />
+            <app-album-card [album]="album" [showType]="activeSubcategory() === 'All'" />
         </button>
         }
     </div>
@@ -62,9 +63,8 @@
     </div>
     }
 
-    <!-- Regular photo grid (non-events or All Events) -->
-    @if (!isSubcategoryActive() || (isSubcategoryActive() && !activeAlbum() && albumsForSubcategory().length === 0)) {
-    @if (!activeAlbum()) {
+    <!-- Regular photo grid (non-events categories) -->
+    @if (!isEventsActive()) {
     <div class="photo-grid">
         @for (photo of filteredPhotos(); track photo.id; let i = $index) {
         <button class="photo-item" (click)="openLightbox(i, $event)">
@@ -72,7 +72,6 @@
         </button>
         }
     </div>
-    }
     }
 
     @if (lightboxIndex() !== null) {
