@@ -13,7 +13,7 @@ export class ContactComponent {
 
     readonly contactItems = [
         { icon: 'phone', label: 'Call Us', value: '+91 90228 00857', href: 'tel:+919022800857' },
-        { icon: 'email', label: 'Email Us', value: 'aditya@photography.com', href: 'mailto:aditya@photography.com' },
+        { icon: 'email', label: 'Email Us', value: 'adityadeshmukhadi@gmail.com', href: 'mailto:adityadeshmukhadi@gmail.com' },
         { icon: 'map', label: 'Find Us', value: 'Pune, Maharashtra', href: null },
     ];
 

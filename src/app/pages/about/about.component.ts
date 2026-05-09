@@ -17,7 +17,7 @@ export class AboutComponent {
     readonly profileImage = RESPONSIVE_IMAGES.aboutProfile;
 
     readonly contactInfo = [
-        { label: 'Email', value: 'aditya@photography.com', icon: 'email', href: 'mailto:aditya@photography.com' },
+        { label: 'Email', value: 'adityadeshmukhadi@gmail.com', icon: 'email', href: 'mailto:adityadeshmukhadi@gmail.com' },
         { label: 'Phone', value: '+91 90228 00857', icon: 'phone', href: 'tel:+919022800857' },
     ];
 
