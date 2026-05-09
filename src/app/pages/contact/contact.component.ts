@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { IMAGES } from '../../core/config/image-paths';
 
@@ -10,18 +10,16 @@ import { IMAGES } from '../../core/config/image-paths';
     styleUrl: './contact.component.scss',
 })
 export class ContactComponent {
-    readonly image = IMAGES.photoMarriage;
-    imageLoaded = signal(false);
 
     readonly contactItems = [
-        { icon: 'phone', label: 'Call Us', value: '+91 98765 43210', href: 'tel:+919876543210' },
+        { icon: 'phone', label: 'Call Us', value: '+91 90228 00857', href: 'tel:+919022800857' },
         { icon: 'email', label: 'Email Us', value: 'aditya@photography.com', href: 'mailto:aditya@photography.com' },
         { icon: 'map', label: 'Find Us', value: 'Pune, Maharashtra', href: null },
     ];
 
     readonly socialLinks = [
         { name: 'Instagram', href: 'https://www.instagram.com/aditya_photography/', icon: IMAGES.instagramIcon },
-        { name: 'WhatsApp', href: 'https://wa.me/919876543210', icon: IMAGES.whatsappIcon },
+        { name: 'WhatsApp', href: 'https://wa.me/919022800857', icon: IMAGES.whatsappIcon },
     ];
 
     constructor(private title: Title, private meta: Meta) {

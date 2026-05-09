@@ -1,11 +1,9 @@
 <main class="contact-page">
     <div class="contact-inner">
 
-        <!-- Image -->
-        <div class="contact-image" [class.loaded]="imageLoaded()">
-            <div class="contact-image__skeleton"></div>
-            <img [src]="image" alt="Photography session" width="600" height="750" loading="eager" fetchpriority="high"
-                (load)="imageLoaded.set(true)" />
+        <!-- Logo -->
+        <div class="contact-image">
+            <img src="assets/logo.svg" alt="Snapfolio" class="contact-logo" />
         </div>
 
         <!-- Info -->

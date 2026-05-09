@@ -74,8 +74,7 @@ export interface PhilosophyContent {
     supportingImageFilename: string;
 }
 
-// Keep EventSubcategory alias for backward compat
-export type { EventSubcategory };
+// Keep EventAlbum alias for backward compat
 export type EventAlbum = Album;
 
 export const PHOTOS: Photo[] = [

@@ -18,12 +18,12 @@ export class AboutComponent {
 
     readonly contactInfo = [
         { label: 'Email', value: 'aditya@photography.com', icon: 'email', href: 'mailto:aditya@photography.com' },
-        { label: 'Phone', value: '+91 98765 43210', icon: 'phone', href: 'tel:+919876543210' },
+        { label: 'Phone', value: '+91 90228 00857', icon: 'phone', href: 'tel:+919022800857' },
     ];
 
     readonly socialLinks = [
         { name: 'Instagram', url: 'https://www.instagram.com/aditya_photography/', icon: IMAGES.instagramIcon },
-        { name: 'WhatsApp', url: 'https://wa.me/919876543210', icon: IMAGES.whatsappIcon },
+        { name: 'WhatsApp', url: 'https://wa.me/919022800857', icon: IMAGES.whatsappIcon },
     ];
 
     constructor(private titleService: Title, private metaService: Meta) {
