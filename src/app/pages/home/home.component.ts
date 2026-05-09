@@ -26,22 +26,15 @@ export class HomeComponent {
         { image: IMAGES.photoImage1, title: 'Portrait Study', subtitle: 'Portrait' },
     ];
     constructor(private title: Title, private meta: Meta) {
-        this.title.setTitle('Snapfolio | Photography Portfolio');
-        this.meta.updateTag({
-            name: 'description',
-            content:
-                'Snapfolio — professional photography portfolio showcasing landscapes, portraits, nature, and events.',
-        });
-        this.meta.updateTag({ property: 'og:title', content: 'Snapfolio | Photography Portfolio' });
-        this.meta.updateTag({
-            property: 'og:description',
-            content: 'Snapfolio — professional photography portfolio showcasing landscapes, portraits, nature, and events.',
-        });
+        this.title.setTitle('Aditya Deshmukh Photography | Portfolio');
+        this.meta.updateTag({ name: 'description', content: 'Aditya Deshmukh Photography — professional portfolio showcasing landscapes, portraits, nature, and events.' });
+        this.meta.updateTag({ property: 'og:title', content: 'Aditya Deshmukh Photography | Portfolio' });
+        this.meta.updateTag({ property: 'og:description', content: 'Aditya Deshmukh Photography — professional portfolio showcasing landscapes, portraits, nature, and events.' });
         this.meta.updateTag({ property: 'og:type', content: 'website' });
         this.meta.updateTag({ property: 'og:url', content: 'https://adityadeshmukhphotgraphy.netlify.app' });
         this.meta.updateTag({ property: 'og:image', content: 'https://adityadeshmukhphotgraphy.netlify.app/assets/images/golden-hour.jpg' });
         this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
-        this.meta.updateTag({ name: 'twitter:title', content: 'Snapfolio | Photography Portfolio' });
+        this.meta.updateTag({ name: 'twitter:title', content: 'Aditya Deshmukh Photography | Portfolio' });
         this.meta.updateTag({ name: 'twitter:description', content: 'Professional photography portfolio — landscapes, portraits, nature, and events.' });
         this.meta.updateTag({ name: 'twitter:image', content: 'https://adityadeshmukhphotgraphy.netlify.app/assets/images/golden-hour.jpg' });
     }

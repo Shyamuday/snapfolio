@@ -1,4 +1,4 @@
-// All hardcoded portfolio data constants for Snapfolio
+// All hardcoded portfolio data constants for Aditya Deshmukh Photography
 import { IMAGES } from '../config/image-paths';
 
 export type PhotoCategory = 'Landscape' | 'Nature' | 'Portrait' | 'Events';

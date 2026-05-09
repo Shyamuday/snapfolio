@@ -22,20 +22,20 @@ export class AboutComponent {
     ];
 
     readonly socialLinks = [
-        { name: 'Instagram', url: 'https://www.instagram.com/aditya_photography/', icon: IMAGES.instagramIcon },
+        { name: 'Instagram', url: 'https://www.instagram.com/addy_d_0607?igsh=dnBvN2hneHNidHhs&utm_source=qr', icon: IMAGES.instagramIcon },
         { name: 'WhatsApp', url: 'https://wa.me/919022800857', icon: IMAGES.whatsappIcon },
     ];
 
     constructor(private titleService: Title, private metaService: Meta) {
-        this.titleService.setTitle('About | Snapfolio');
+        this.titleService.setTitle('About | Aditya Deshmukh Photography');
         this.metaService.updateTag({ name: 'description', content: 'Meet Aditya — a professional photographer with 12 years of experience in weddings, fashion, travel, and nature photography based in Pune, India.' });
-        this.metaService.updateTag({ property: 'og:title', content: 'About Aditya | Snapfolio' });
+        this.metaService.updateTag({ property: 'og:title', content: 'About Aditya Deshmukh Photography' });
         this.metaService.updateTag({ property: 'og:description', content: 'Professional photographer specialising in weddings, fashion, travel, and nature. Based in Pune, India.' });
         this.metaService.updateTag({ property: 'og:type', content: 'profile' });
         this.metaService.updateTag({ property: 'og:url', content: 'https://adityadeshmukhphotgraphy.netlify.app/about' });
         this.metaService.updateTag({ property: 'og:image', content: 'https://adityadeshmukhphotgraphy.netlify.app/assets/images/photo-image-1.JPG' });
         this.metaService.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
-        this.metaService.updateTag({ name: 'twitter:title', content: 'About Aditya | Snapfolio' });
+        this.metaService.updateTag({ name: 'twitter:title', content: 'About Aditya Deshmukh Photography' });
         this.metaService.updateTag({ name: 'twitter:description', content: 'Professional photographer specialising in weddings, fashion, travel, and nature.' });
         this.metaService.updateTag({ name: 'twitter:image', content: 'https://adityadeshmukhphotgraphy.netlify.app/assets/images/photo-image-1.JPG' });
     }

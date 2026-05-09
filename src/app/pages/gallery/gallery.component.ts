@@ -51,9 +51,9 @@ export class GalleryComponent implements OnInit {
     triggerElement: HTMLElement | null = null;
 
     constructor() {
-        this.titleService.setTitle('Gallery | Snapfolio');
+        this.titleService.setTitle('Gallery | Aditya Deshmukh Photography');
         this.metaService.updateTag({ name: 'description', content: 'Browse the full photo gallery — landscapes, nature, portraits, and events.' });
-        this.metaService.updateTag({ property: 'og:title', content: 'Gallery | Snapfolio' });
+        this.metaService.updateTag({ property: 'og:title', content: 'Gallery | Aditya Deshmukh Photography' });
         this.metaService.updateTag({ property: 'og:description', content: 'Browse the full photo gallery — landscapes, nature, portraits, and events.' });
     }
 
