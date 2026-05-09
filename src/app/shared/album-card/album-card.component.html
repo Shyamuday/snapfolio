@@ -6,7 +6,8 @@
     }
 
     @if (showType()) {
-    <div class="album-cover__type-badge">{{ album().subcategory }}</div>
+    <div class="album-cover__type-badge">{{ album().category === 'Events' ? album().subcategory : album().category }}
+    </div>
     }
 
     <div class="album-cover__overlay">

@@ -22,8 +22,8 @@ export class GalleryComponent implements OnInit {
     activeCategory = signal<PhotoCategory | 'All'>('All');
     activeSubcategory = signal<PhotoSubcategory | 'All'>('All');
     activeAlbum = signal<Album | null>(null);
+    loadedImages = signal<Set<number>>(new Set());
 
-    // Whether the selected category uses the album/subcategory system (all non-All categories)
     isCategoryActive = computed(() => this.activeCategory() !== 'All');
 
     subcategoriesForCategory = computed(() => {
@@ -35,7 +35,7 @@ export class GalleryComponent implements OnInit {
     albumsForView = computed(() => {
         const cat = this.activeCategory();
         const sub = this.activeSubcategory();
-        if (cat === 'All') return [];
+        if (cat === 'All') return this.portfolioService.albums;
         if (sub === 'All') return this.portfolioService.getAlbumsByCategory(cat);
         return this.portfolioService.getAlbumsByCategoryAndSubcategory(cat, sub as PhotoSubcategory);
     });
@@ -43,8 +43,24 @@ export class GalleryComponent implements OnInit {
     filteredPhotos = computed((): Photo[] => {
         const album = this.activeAlbum();
         if (album) return album.photos;
-        // Only used for "All" category flat view
         return this.portfolioService.photos;
+    });
+
+    breadcrumbs = computed(() => {
+        const cat = this.activeCategory();
+        const sub = this.activeSubcategory();
+        const album = this.activeAlbum();
+        const crumbs: { label: string; action: () => void }[] = [];
+        if (cat !== 'All') {
+            crumbs.push({ label: cat, action: () => this.setCategory(cat) });
+            if (sub !== 'All') {
+                crumbs.push({ label: sub, action: () => this.setSubcategory(sub) });
+            }
+            if (album) {
+                crumbs.push({ label: album.name, action: () => { } });
+            }
+        }
+        return crumbs;
     });
 
     lightboxIndex = signal<number | null>(null);
@@ -68,21 +84,33 @@ export class GalleryComponent implements OnInit {
         this.activeCategory.set(cat);
         this.activeSubcategory.set('All');
         this.activeAlbum.set(null);
+        this.loadedImages.set(new Set());
     }
 
     setSubcategory(sub: PhotoSubcategory | 'All'): void {
         this.activeSubcategory.set(sub);
         this.activeAlbum.set(null);
+        this.loadedImages.set(new Set());
     }
 
     openAlbum(album: Album): void {
         this.activeAlbum.set(album);
         this.lightboxIndex.set(null);
+        this.loadedImages.set(new Set());
     }
 
     closeAlbum(): void {
         this.activeAlbum.set(null);
         this.lightboxIndex.set(null);
+        this.loadedImages.set(new Set());
+    }
+
+    onImageLoad(id: number): void {
+        this.loadedImages.update(s => new Set([...s, id]));
+    }
+
+    isImageLoaded(id: number): boolean {
+        return this.loadedImages().has(id);
     }
 
     openLightbox(index: number, event: MouseEvent): void {
