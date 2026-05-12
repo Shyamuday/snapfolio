@@ -2,7 +2,7 @@
 
 // ─── Variables ───────────────────────────────────────────────────────────────
 $header-bg: #0d0d0d;
-$header-height: 64px;
+$header-height: 84px;
 $text-color: #f0ede8;
 $text-muted: rgba(255, 255, 255, 0.65);
 $accent: #e8e0d5;
@@ -45,7 +45,7 @@ $transition: 0.25s ease;
   }
 
   &__logo {
-    height: 72px;
+    height: 94px;
     width: auto;
     display: block;
     filter: invert(1);
@@ -273,7 +273,57 @@ $transition: 0.25s ease;
   }
 }
 
-// ─── Mobile Gallery Sub-menu ─────────────────────────────────────────────────
+// ─── About scroll button (matches nav link style) ────────────────────────────
+.nav-about-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $text-muted;
+  position: relative;
+  transition: color $transition;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: $accent;
+    transition: width $transition;
+  }
+
+  &:hover {
+    color: $text-color;
+    &::after { width: 100%; }
+  }
+
+  // mobile variant
+  .mobile-nav & {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.85rem 1.25rem;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: none;
+    border-radius: 0;
+
+    &::after { display: none; }
+
+    &:hover {
+      color: $text-color;
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+  }
+}
+
+
 .mobile-gallery-group {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }

@@ -32,7 +32,7 @@
                 }
             </div>
 
-            <a routerLink="/about" routerLinkActive="active">About</a>
+            <button class="nav-about-btn" (click)="scrollToAbout()">About</button>
             <a routerLink="/contact" routerLinkActive="active">Contact</a>
         </nav>
 
@@ -73,7 +73,7 @@
                 }
             </div>
 
-            <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
+            <button class="nav-about-btn" (click)="scrollToAbout()">About</button>
             <a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">Contact</a>
         </nav>
     </div>

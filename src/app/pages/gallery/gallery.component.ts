@@ -4,7 +4,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { PortfolioService } from '../../core/services/portfolio.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
 import { AlbumCardComponent } from '../../shared/album-card/album-card.component';
-import { Album, Photo, PhotoCategory, PhotoSubcategory } from '../../core/data/portfolio.data';
+import { Album, Photo, PhotoCategory } from '../../core/data/portfolio.data';
 
 @Component({
     selector: 'app-gallery',
@@ -20,24 +20,13 @@ export class GalleryComponent implements OnInit {
     private readonly metaService = inject(Meta);
 
     activeCategory = signal<PhotoCategory | 'All'>('All');
-    activeSubcategory = signal<PhotoSubcategory | 'All'>('All');
     activeAlbum = signal<Album | null>(null);
     loadedImages = signal<Set<number>>(new Set());
 
-    isCategoryActive = computed(() => this.activeCategory() !== 'All');
-
-    subcategoriesForCategory = computed(() => {
-        const cat = this.activeCategory();
-        if (cat === 'All') return [];
-        return this.portfolioService.getSubcategories(cat);
-    });
-
     albumsForView = computed(() => {
         const cat = this.activeCategory();
-        const sub = this.activeSubcategory();
         if (cat === 'All') return this.portfolioService.albums;
-        if (sub === 'All') return this.portfolioService.getAlbumsByCategory(cat);
-        return this.portfolioService.getAlbumsByCategoryAndSubcategory(cat, sub as PhotoSubcategory);
+        return this.portfolioService.getAlbumsByCategory(cat);
     });
 
     filteredPhotos = computed((): Photo[] => {
@@ -48,14 +37,10 @@ export class GalleryComponent implements OnInit {
 
     breadcrumbs = computed(() => {
         const cat = this.activeCategory();
-        const sub = this.activeSubcategory();
         const album = this.activeAlbum();
         const crumbs: { label: string; action: () => void }[] = [];
         if (cat !== 'All') {
             crumbs.push({ label: cat, action: () => this.setCategory(cat) });
-            if (sub !== 'All') {
-                crumbs.push({ label: sub, action: () => this.setSubcategory(sub) });
-            }
             if (album) {
                 crumbs.push({ label: album.name, action: () => { } });
             }
@@ -68,9 +53,9 @@ export class GalleryComponent implements OnInit {
 
     constructor() {
         this.titleService.setTitle('Gallery | Aditya Deshmukh Photography');
-        this.metaService.updateTag({ name: 'description', content: 'Browse the full photo gallery — landscapes, nature, portraits, and events.' });
+        this.metaService.updateTag({ name: 'description', content: 'Browse the full gallery — films, fashion, commercial, and wedding photography.' });
         this.metaService.updateTag({ property: 'og:title', content: 'Gallery | Aditya Deshmukh Photography' });
-        this.metaService.updateTag({ property: 'og:description', content: 'Browse the full photo gallery — landscapes, nature, portraits, and events.' });
+        this.metaService.updateTag({ property: 'og:description', content: 'Browse the full gallery — films, fashion, commercial, and wedding photography.' });
     }
 
     ngOnInit(): void {
@@ -82,13 +67,6 @@ export class GalleryComponent implements OnInit {
 
     setCategory(cat: PhotoCategory | 'All'): void {
         this.activeCategory.set(cat);
-        this.activeSubcategory.set('All');
-        this.activeAlbum.set(null);
-        this.loadedImages.set(new Set());
-    }
-
-    setSubcategory(sub: PhotoSubcategory | 'All'): void {
-        this.activeSubcategory.set(sub);
         this.activeAlbum.set(null);
         this.loadedImages.set(new Set());
     }

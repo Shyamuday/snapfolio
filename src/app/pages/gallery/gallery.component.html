@@ -12,20 +12,6 @@
             </button>
             }
         </div>
-
-        @if (isCategoryActive()) {
-        <div class="subcategory-bar">
-            <button class="subcategory-btn" [class.active]="activeSubcategory() === 'All'"
-                (click)="setSubcategory('All')">
-                All {{ activeCategory() }}
-            </button>
-            @for (sub of subcategoriesForCategory(); track sub) {
-            <button class="subcategory-btn" [class.active]="activeSubcategory() === sub" (click)="setSubcategory(sub)">
-                {{ sub }}
-            </button>
-            }
-        </div>
-        }
     </div>
 
     <!-- Breadcrumb trail -->
@@ -43,7 +29,7 @@
     </nav>
     }
 
-    <!-- Album grid (all categories including All) -->
+    <!-- Album grid -->
     @if (!activeAlbum()) {
     @if (albumsForView().length === 0) {
     <div class="empty-state">
@@ -58,7 +44,7 @@
     <div class="album-grid">
         @for (album of albumsForView(); track album.id) {
         <button class="album-card" (click)="openAlbum(album)">
-            <app-album-card [album]="album" [showType]="activeCategory() === 'All' || activeSubcategory() === 'All'" />
+            <app-album-card [album]="album" [showType]="activeCategory() === 'All'" />
         </button>
         }
     </div>

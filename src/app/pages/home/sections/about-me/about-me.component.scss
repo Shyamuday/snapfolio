@@ -1,0 +1,42 @@
+@use 'styles' as *;
+
+.about-me {
+  min-height: 100vh;
+  padding: 6rem 1.5rem;
+  background: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.about-me__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-me__eyebrow {
+  display: inline-block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 0.75rem;
+}
+
+.about-me__heading {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 1.25rem;
+  letter-spacing: 0.01em;
+}
+
+.about-me__body {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: #555;
+  margin: 0 0 1rem;
+
+  &:last-child { margin-bottom: 0; }
+}

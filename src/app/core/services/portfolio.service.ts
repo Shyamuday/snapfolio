@@ -31,7 +31,7 @@ export class PortfolioService {
 
     // Backward compat
     get eventAlbums(): Album[] {
-        return this.albums.filter(a => a.category === 'Events');
+        return this.albums.filter(a => a.category === 'Wedding/Events');
     }
 
     get featuredPhotos(): Photo[] {

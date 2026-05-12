@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
-const GALLERY_CATEGORIES = ['All', 'Landscape', 'Nature', 'Portrait', 'Events'] as const;
+const GALLERY_CATEGORIES = ['All', 'Films', 'Fashion', 'Commercial/Corporate', 'Wedding/Events'] as const;
 
 @Component({
     selector: 'app-header',
@@ -72,6 +72,20 @@ export class HeaderComponent {
             this.router.navigate(['/gallery']);
         } else {
             this.router.navigate(['/gallery'], { queryParams: { category } });
+        }
+    }
+
+    scrollToAbout(): void {
+        this.closeMenu();
+        const isHome = this.router.url === '/' || this.router.url === '';
+        if (isHome) {
+            document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            this.router.navigate(['/']).then(() => {
+                setTimeout(() => {
+                    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            });
         }
     }
 }
