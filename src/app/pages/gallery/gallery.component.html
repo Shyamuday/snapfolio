@@ -3,16 +3,29 @@
     <!-- Category filters -->
     <div class="filter-area">
         <div class="filter-bar">
-            <button class="filter-btn" [class.active]="activeCategory() === 'All'" (click)="setCategory('All')">
+            <button class="filter-btn" [class.active]="activeCategory() === 'All'"
+                [attr.aria-pressed]="activeCategory() === 'All'" (click)="setCategory('All')">
                 All
             </button>
             @for (cat of categories(); track cat) {
-            <button class="filter-btn" [class.active]="activeCategory() === cat" (click)="setCategory(cat)">
+            <button class="filter-btn" [class.active]="activeCategory() === cat"
+                [attr.aria-pressed]="activeCategory() === cat" (click)="setCategory(cat)">
                 {{ cat }}
             </button>
             }
         </div>
     </div>
+
+    <!-- Loading skeleton — shown while manifest fetches -->
+    @if (!manifestLoaded()) {
+    <div class="photo-grid">
+        @for (n of skeletonItems; track n) {
+        <div class="photo-item">
+            <div class="photo-skeleton"></div>
+        </div>
+        }
+    </div>
+    } @else {
 
     <!-- Image count -->
     <p class="gallery-count">
@@ -50,6 +63,7 @@
         <span class="loading-more__dot"></span>
         <span class="loading-more__dot"></span>
     </div>
+    }
     }
     }
 

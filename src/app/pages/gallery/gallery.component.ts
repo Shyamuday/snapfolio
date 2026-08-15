@@ -30,9 +30,13 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
     imagesByCategory = signal<Record<string, string[]>>({});
     loadedImages = signal<Set<string>>(new Set());
     visibleCount = signal<number>(PAGE_SIZE);
+    manifestLoaded = signal<boolean>(false);
 
     lightboxIndex = signal<number | null>(null);
     triggerElement: HTMLElement | null = null;
+
+    /** Placeholder array for the loading skeleton grid */
+    readonly skeletonItems = Array.from({ length: 24 }, (_, i) => i);
 
     /** All images for the active category */
     allImages = computed(() => {
@@ -67,6 +71,7 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
         this.manifestService.getManifest().subscribe(manifest => {
             this.imagesByCategory.set(manifest);
             this.categories.set(Object.keys(manifest).sort());
+            this.manifestLoaded.set(true);
 
             const cat = this.route.snapshot.queryParams['category'];
             if (cat && manifest[cat]) {
