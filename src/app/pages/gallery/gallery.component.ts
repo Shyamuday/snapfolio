@@ -1,94 +1,119 @@
-import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, ElementRef, ViewChild, AfterViewInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
-import { PortfolioService } from '../../core/services/portfolio.service';
+import { ImageManifestService } from '../../core/services/image-manifest.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
-import { AlbumCardComponent } from '../../shared/album-card/album-card.component';
-import { Album, Photo, PhotoCategory } from '../../core/data/portfolio.data';
+
+const PAGE_SIZE = 24;
 
 @Component({
     selector: 'app-gallery',
     standalone: true,
-    imports: [LightboxComponent, AlbumCardComponent],
+    imports: [CommonModule, LightboxComponent],
     templateUrl: './gallery.component.html',
     styleUrl: './gallery.component.scss',
 })
-export class GalleryComponent implements OnInit {
-    protected readonly portfolioService = inject(PortfolioService);
+export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
+    private readonly manifestService = inject(ImageManifestService);
     private readonly route = inject(ActivatedRoute);
     private readonly titleService = inject(Title);
     private readonly metaService = inject(Meta);
+    private readonly platformId = inject(PLATFORM_ID);
 
-    activeCategory = signal<PhotoCategory | 'All'>('All');
-    activeAlbum = signal<Album | null>(null);
-    loadedImages = signal<Set<number>>(new Set());
+    @ViewChild('sentinel') sentinel!: ElementRef<HTMLDivElement>;
+    private observer: IntersectionObserver | null = null;
 
-    albumsForView = computed(() => {
-        const cat = this.activeCategory();
-        if (cat === 'All') return this.portfolioService.albums;
-        return this.portfolioService.getAlbumsByCategory(cat);
-    });
-
-    filteredPhotos = computed((): Photo[] => {
-        const album = this.activeAlbum();
-        if (album) return album.photos;
-        return this.portfolioService.photos;
-    });
-
-    breadcrumbs = computed(() => {
-        const cat = this.activeCategory();
-        const album = this.activeAlbum();
-        const crumbs: { label: string; action: () => void }[] = [];
-        if (cat !== 'All') {
-            crumbs.push({ label: cat, action: () => this.setCategory(cat) });
-            if (album) {
-                crumbs.push({ label: album.name, action: () => { } });
-            }
-        }
-        return crumbs;
-    });
+    categories = signal<string[]>([]);
+    activeCategory = signal<string>('All');
+    imagesByCategory = signal<Record<string, string[]>>({});
+    loadedImages = signal<Set<string>>(new Set());
+    visibleCount = signal<number>(PAGE_SIZE);
 
     lightboxIndex = signal<number | null>(null);
     triggerElement: HTMLElement | null = null;
 
+    /** All images for the active category */
+    allImages = computed(() => {
+        const cat = this.activeCategory();
+        const all = this.imagesByCategory();
+        return cat === 'All' ? Object.values(all).flat() : (all[cat] ?? []);
+    });
+
+    /** Only the slice currently rendered */
+    visibleImages = computed(() =>
+        this.allImages().slice(0, this.visibleCount())
+    );
+
+    hasMore = computed(() => this.visibleCount() < this.allImages().length);
+
+    lightboxPhotos = computed(() =>
+        this.allImages().map((src, i) => ({
+            id: i,
+            title: '',
+            description: '',
+            filename: src,
+            category: 'Fashion' as any,
+        }))
+    );
+
     constructor() {
         this.titleService.setTitle('Gallery | Aditya Deshmukh Photography');
         this.metaService.updateTag({ name: 'description', content: 'Browse the full gallery — films, fashion, commercial, and wedding photography.' });
-        this.metaService.updateTag({ property: 'og:title', content: 'Gallery | Aditya Deshmukh Photography' });
-        this.metaService.updateTag({ property: 'og:description', content: 'Browse the full gallery — films, fashion, commercial, and wedding photography.' });
     }
 
     ngOnInit(): void {
-        const category = this.route.snapshot.queryParams['category'];
-        if (category) {
-            this.activeCategory.set(category as PhotoCategory);
+        this.manifestService.getManifest().subscribe(manifest => {
+            this.imagesByCategory.set(manifest);
+            this.categories.set(Object.keys(manifest).sort());
+
+            const cat = this.route.snapshot.queryParams['category'];
+            if (cat && manifest[cat]) {
+                this.activeCategory.set(cat);
+            }
+        });
+    }
+
+    ngAfterViewInit(): void {
+        if (isPlatformBrowser(this.platformId)) {
+            this.setupObserver();
         }
     }
 
-    setCategory(cat: PhotoCategory | 'All'): void {
+    ngOnDestroy(): void {
+        this.observer?.disconnect();
+    }
+
+    private setupObserver(): void {
+        this.observer?.disconnect();
+        this.observer = new IntersectionObserver(entries => {
+            if (entries[0]?.isIntersecting && this.hasMore()) {
+                this.visibleCount.update(n => n + PAGE_SIZE);
+            }
+        }, { rootMargin: '400px' });
+
+        if (this.sentinel?.nativeElement) {
+            this.observer.observe(this.sentinel.nativeElement);
+        }
+    }
+
+    setCategory(cat: string): void {
         this.activeCategory.set(cat);
-        this.activeAlbum.set(null);
+        this.visibleCount.set(PAGE_SIZE);
         this.loadedImages.set(new Set());
+        // Re-observe sentinel after view updates
+        if (isPlatformBrowser(this.platformId)) {
+            setTimeout(() => this.setupObserver(), 50);
+        }
     }
 
-    openAlbum(album: Album): void {
-        this.activeAlbum.set(album);
-        this.lightboxIndex.set(null);
-        this.loadedImages.set(new Set());
+    onImageLoad(src: string): void {
+        this.loadedImages.update(s => new Set([...s, src]));
     }
 
-    closeAlbum(): void {
-        this.activeAlbum.set(null);
-        this.lightboxIndex.set(null);
-        this.loadedImages.set(new Set());
-    }
-
-    onImageLoad(id: number): void {
-        this.loadedImages.update(s => new Set([...s, id]));
-    }
-
-    isImageLoaded(id: number): boolean {
-        return this.loadedImages().has(id);
+    isLoaded(src: string): boolean {
+        return this.loadedImages().has(src);
     }
 
     openLightbox(index: number, event: MouseEvent): void {

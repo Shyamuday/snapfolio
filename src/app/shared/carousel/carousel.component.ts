@@ -32,14 +32,23 @@ export class CarouselComponent implements OnInit, OnDestroy {
 
     activeIndex = signal(0);
     isAnimating = signal(false);
-    /** Incremented on every slide change — forces text animation to re-trigger */
     animKey = signal(0);
-    /** 0–100 progress for the progress bar */
     progress = signal(0);
     private progressTimer: ReturnType<typeof setInterval> | null = null;
 
+    /** Tracks which slide images have finished loading */
+    loadedSlides = signal<Set<number>>(new Set());
+
     total = computed(() => this.slides.length);
     current = computed(() => this.slides[this.activeIndex()]);
+
+    isSlideLoaded(index: number): boolean {
+        return this.loadedSlides().has(index);
+    }
+
+    onSlideImageLoad(index: number): void {
+        this.loadedSlides.update(s => new Set([...s, index]));
+    }
 
     ngOnInit(): void {
         if (isPlatformBrowser(this.platformId) && this.interval > 0) {

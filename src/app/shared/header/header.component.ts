@@ -77,14 +77,19 @@ export class HeaderComponent {
 
     scrollToAbout(): void {
         this.closeMenu();
+        const scroll = () => {
+            const el = document.getElementById('about');
+            if (!el) return;
+            const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 84;
+            const top = el.getBoundingClientRect().top + window.scrollY - headerHeight;
+            window.scrollTo({ top, behavior: 'smooth' });
+        };
         const isHome = this.router.url === '/' || this.router.url === '';
         if (isHome) {
-            document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+            scroll();
         } else {
             this.router.navigate(['/']).then(() => {
-                setTimeout(() => {
-                    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-                }, 300);
+                setTimeout(scroll, 300);
             });
         }
     }
