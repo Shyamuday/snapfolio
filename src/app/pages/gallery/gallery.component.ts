@@ -1,12 +1,15 @@
-import { Component, OnInit, OnDestroy, signal, computed, inject, ElementRef, ViewChild, AfterViewInit, PLATFORM_ID } from '@angular/core';
+import {
+    Component, OnInit, OnDestroy, AfterViewInit,
+    signal, computed, inject, ElementRef, ViewChild, PLATFORM_ID
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
-import { ImageManifestService } from '../../core/services/image-manifest.service';
+import { GalleryApiService, GalleryImage, GALLERY_CATEGORIES, GalleryCategory } from '../../core/services/gallery-api.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
 
-const PAGE_SIZE = 24;
+const PAGE_LIMIT = 24;
 
 @Component({
     selector: 'app-gallery',
@@ -16,7 +19,7 @@ const PAGE_SIZE = 24;
     styleUrl: './gallery.component.scss',
 })
 export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
-    private readonly manifestService = inject(ImageManifestService);
+    private readonly api = inject(GalleryApiService);
     private readonly route = inject(ActivatedRoute);
     private readonly titleService = inject(Title);
     private readonly metaService = inject(Meta);
@@ -25,40 +28,34 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('sentinel') sentinel!: ElementRef<HTMLDivElement>;
     private observer: IntersectionObserver | null = null;
 
-    categories = signal<string[]>([]);
-    activeCategory = signal<string>('All');
-    imagesByCategory = signal<Record<string, string[]>>({});
-    loadedImages = signal<Set<string>>(new Set());
-    visibleCount = signal<number>(PAGE_SIZE);
-    manifestLoaded = signal<boolean>(false);
+    readonly categories = GALLERY_CATEGORIES;
+
+    activeCategory = signal<GalleryCategory>('All');
+    images = signal<GalleryImage[]>([]);
+    loadedUrls = signal<Set<string>>(new Set());
+    isLoading = signal(false);
+    isInitialLoad = signal(true);
+
+    private currentPage = 1;
+    private hasNext = true;
+    private loadingPage = false;
+
+    // For "All" mode we cycle through categories
+    private allCategoryIndex = 0;
+    private allCategoryPages: Record<string, { page: number; hasNext: boolean }> = {};
+
+    readonly skeletonItems = Array.from({ length: PAGE_LIMIT }, (_, i) => i);
 
     lightboxIndex = signal<number | null>(null);
     triggerElement: HTMLElement | null = null;
 
-    /** Placeholder array for the loading skeleton grid */
-    readonly skeletonItems = Array.from({ length: 24 }, (_, i) => i);
-
-    /** All images for the active category */
-    allImages = computed(() => {
-        const cat = this.activeCategory();
-        const all = this.imagesByCategory();
-        return cat === 'All' ? Object.values(all).flat() : (all[cat] ?? []);
-    });
-
-    /** Only the slice currently rendered */
-    visibleImages = computed(() =>
-        this.allImages().slice(0, this.visibleCount())
-    );
-
-    hasMore = computed(() => this.visibleCount() < this.allImages().length);
-
     lightboxPhotos = computed(() =>
-        this.allImages().map((src, i) => ({
+        this.images().map((img, i) => ({
             id: i,
-            title: '',
+            title: img.fileName,
             description: '',
-            filename: src,
-            category: 'Fashion' as any,
+            filename: img.url,
+            category: img.eventType as any,
         }))
     );
 
@@ -68,16 +65,11 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.manifestService.getManifest().subscribe(manifest => {
-            this.imagesByCategory.set(manifest);
-            this.categories.set(Object.keys(manifest).sort());
-            this.manifestLoaded.set(true);
-
-            const cat = this.route.snapshot.queryParams['category'];
-            if (cat && manifest[cat]) {
-                this.activeCategory.set(cat);
-            }
-        });
+        const cat = this.route.snapshot.queryParams['category'] as GalleryCategory;
+        if (cat && cat !== 'All') {
+            this.activeCategory.set(cat);
+        }
+        this.loadNextPage();
     }
 
     ngAfterViewInit(): void {
@@ -90,11 +82,98 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
         this.observer?.disconnect();
     }
 
+    setCategory(cat: GalleryCategory): void {
+        if (cat === this.activeCategory()) return;
+        this.activeCategory.set(cat);
+        this.images.set([]);
+        this.loadedUrls.set(new Set());
+        this.currentPage = 1;
+        this.hasNext = true;
+        this.loadingPage = false;
+        this.allCategoryIndex = 0;
+        this.allCategoryPages = {};
+        this.isInitialLoad.set(true);
+        this.loadNextPage();
+        if (isPlatformBrowser(this.platformId)) {
+            setTimeout(() => this.setupObserver(), 100);
+        }
+    }
+
+    private loadNextPage(): void {
+        if (this.loadingPage) return;
+
+        const cat = this.activeCategory();
+
+        if (cat === 'All') {
+            this.loadNextAllPage();
+        } else {
+            if (!this.hasNext) return;
+            this.fetchPage(cat, this.currentPage);
+        }
+    }
+
+    private loadNextAllPage(): void {
+        // Round-robin through categories for "All" view
+        const cats = [...GALLERY_CATEGORIES];
+        let attempts = 0;
+
+        while (attempts < cats.length) {
+            const cat = cats[this.allCategoryIndex % cats.length];
+            const state = this.allCategoryPages[cat] ?? { page: 1, hasNext: true };
+
+            if (state.hasNext) {
+                this.fetchPage(cat, state.page, true);
+                return;
+            }
+
+            this.allCategoryIndex++;
+            attempts++;
+        }
+        // All categories exhausted
+        this.hasNext = false;
+    }
+
+    private fetchPage(eventType: string, page: number, isAll = false): void {
+        this.loadingPage = true;
+        this.isLoading.set(true);
+
+        this.api.getImages(eventType, page, PAGE_LIMIT).subscribe({
+            next: result => {
+                this.images.update(imgs => [...imgs, ...result.images]);
+                this.isInitialLoad.set(false);
+                this.isLoading.set(false);
+                this.loadingPage = false;
+
+                if (isAll) {
+                    this.allCategoryPages[eventType] = {
+                        page: page + 1,
+                        hasNext: result.pagination.hasNext,
+                    };
+                    this.allCategoryIndex++;
+                    // Check if any category still has pages
+                    const cats = [...GALLERY_CATEGORIES];
+                    this.hasNext = cats.some(c => {
+                        const s = this.allCategoryPages[c];
+                        return !s || s.hasNext;
+                    });
+                } else {
+                    this.currentPage = page + 1;
+                    this.hasNext = result.pagination.hasNext;
+                }
+            },
+            error: () => {
+                this.isLoading.set(false);
+                this.loadingPage = false;
+                this.isInitialLoad.set(false);
+            }
+        });
+    }
+
     private setupObserver(): void {
         this.observer?.disconnect();
         this.observer = new IntersectionObserver(entries => {
-            if (entries[0]?.isIntersecting && this.hasMore()) {
-                this.visibleCount.update(n => n + PAGE_SIZE);
+            if (entries[0]?.isIntersecting && !this.loadingPage && this.hasNext) {
+                this.loadNextPage();
             }
         }, { rootMargin: '400px' });
 
@@ -103,22 +182,12 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    setCategory(cat: string): void {
-        this.activeCategory.set(cat);
-        this.visibleCount.set(PAGE_SIZE);
-        this.loadedImages.set(new Set());
-        // Re-observe sentinel after view updates
-        if (isPlatformBrowser(this.platformId)) {
-            setTimeout(() => this.setupObserver(), 50);
-        }
+    onImageLoad(url: string): void {
+        this.loadedUrls.update(s => new Set([...s, url]));
     }
 
-    onImageLoad(src: string): void {
-        this.loadedImages.update(s => new Set([...s, src]));
-    }
-
-    isLoaded(src: string): boolean {
-        return this.loadedImages().has(src);
+    isLoaded(url: string): boolean {
+        return this.loadedUrls().has(url);
     }
 
     openLightbox(index: number, event: MouseEvent): void {

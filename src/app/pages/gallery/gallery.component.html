@@ -7,7 +7,7 @@
                 [attr.aria-pressed]="activeCategory() === 'All'" (click)="setCategory('All')">
                 All
             </button>
-            @for (cat of categories(); track cat) {
+            @for (cat of categories; track cat) {
             <button class="filter-btn" [class.active]="activeCategory() === cat"
                 [attr.aria-pressed]="activeCategory() === cat" (click)="setCategory(cat)">
                 {{ cat }}
@@ -16,8 +16,8 @@
         </div>
     </div>
 
-    <!-- Loading skeleton — shown while manifest fetches -->
-    @if (!manifestLoaded()) {
+    <!-- Initial skeleton while first page loads -->
+    @if (isInitialLoad()) {
     <div class="photo-grid">
         @for (n of skeletonItems; track n) {
         <div class="photo-item">
@@ -28,12 +28,10 @@
     } @else {
 
     <!-- Image count -->
-    <p class="gallery-count">
-        {{ visibleImages().length }} of {{ allImages().length }} photos
-    </p>
+    <p class="gallery-count">{{ images().length }} photos loaded</p>
 
     <!-- Photo grid -->
-    @if (allImages().length === 0) {
+    @if (images().length === 0 && !isLoading()) {
     <div class="empty-state">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
             <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -44,11 +42,11 @@
     </div>
     } @else {
     <div class="photo-grid">
-        @for (src of visibleImages(); track src; let i = $index) {
-        <button class="photo-item" [class.loaded]="isLoaded(src)" (click)="openLightbox(i, $event)"
-            [attr.aria-label]="'View photo ' + (i + 1)">
+        @for (img of images(); track img.key; let i = $index) {
+        <button class="photo-item" [class.loaded]="isLoaded(img.url)" (click)="openLightbox(i, $event)"
+            [attr.aria-label]="'View ' + img.fileName">
             <div class="photo-skeleton"></div>
-            <img [src]="src" alt="" loading="lazy" (load)="onImageLoad(src)" />
+            <img [src]="img.url" [alt]="img.fileName" loading="lazy" (load)="onImageLoad(img.url)" />
         </button>
         }
     </div>
@@ -56,8 +54,8 @@
     <!-- Infinite scroll sentinel -->
     <div #sentinel class="sentinel"></div>
 
-    <!-- Loading more indicator -->
-    @if (hasMore()) {
+    <!-- Loading more -->
+    @if (isLoading()) {
     <div class="loading-more">
         <span class="loading-more__dot"></span>
         <span class="loading-more__dot"></span>
