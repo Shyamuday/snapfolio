@@ -26,10 +26,10 @@
     <!-- Photo grid — all URLs rendered immediately, images reveal as they load -->
     <div class="photo-grid">
         @for (img of images(); track img.key; let i = $index) {
-        <button class="photo-item" [class.loaded]="isLoaded(img.url)" [style.--stagger]="staggerDelay(i)"
-            (click)="openLightbox(i, $event)" [attr.aria-label]="'View photo'">
+        <button class="photo-item" (click)="openLightbox(i, $event)" [attr.aria-label]="'View photo'">
             <div class="photo-skeleton"></div>
-            <img [src]="img.url" alt="" loading="lazy" (load)="onImageLoad(img.url)" />
+            <img [src]="img.url" alt="" [loading]="i < 8 ? 'eager' : 'lazy'" decoding="async" (load)="onImgLoad($event)"
+                (error)="onImgLoad($event)" />
         </button>
         }
 

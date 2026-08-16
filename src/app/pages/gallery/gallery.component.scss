@@ -84,21 +84,17 @@
     display: block;
     position: relative;
     z-index: 1;
-    opacity: 0;
-    // Use CSS var for stagger — falls back to 0ms
-    transition: opacity 0.4s ease var(--stagger, 0ms),
-                transform 0.3s ease;
+    // Show immediately — skeleton shows through until image paints
+    opacity: 1;
+    transition: transform 0.3s ease;
   }
 
   &:hover img { transform: scale(1.04); }
 
-  // Once image fires (load) event, parent gets .loaded → reveal
-  &.loaded {
-    .photo-skeleton {
-      opacity: 0;
-      pointer-events: none;
-    }
-    img { opacity: 1; }
+  // Skeleton hides itself once image is visible (via (load) event as bonus)
+  &.loaded .photo-skeleton {
+    opacity: 0;
+    pointer-events: none;
   }
 
   // Pure skeleton placeholder (no img inside)

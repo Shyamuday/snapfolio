@@ -31,7 +31,6 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
 
     activeCategory = signal<GalleryCategory>('Corporate');
     images = signal<GalleryImage[]>([]);
-    loadedUrls = signal<Set<string>>(new Set());
     isLoading = signal(false);
     isInitialLoad = signal(true);
 
@@ -81,7 +80,6 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
         if (cat === this.activeCategory()) return;
         this.activeCategory.set(cat);
         this.images.set([]);
-        this.loadedUrls.set(new Set());
         this.currentPage = 1;
         this.hasNext = true;
         this.loadingPage = false;
@@ -100,8 +98,6 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.api.getImages(this.activeCategory(), this.currentPage).subscribe({
             next: result => {
-                // Append all URLs immediately — browser starts fetching all in parallel
-                // Images will reveal themselves one by one via the (load) event + CSS fade
                 this.images.update(imgs => [...imgs, ...result.images]);
                 this.currentPage++;
                 this.hasNext = result.pagination.hasNext;
@@ -109,7 +105,8 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isLoading.set(false);
                 this.loadingPage = false;
             },
-            error: () => {
+            error: (err) => {
+                console.error('[Gallery] API error:', err);
                 this.isLoading.set(false);
                 this.loadingPage = false;
                 this.isInitialLoad.set(false);
@@ -129,19 +126,10 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    onImageLoad(url: string): void {
-        this.loadedUrls.update(s => new Set([...s, url]));
-    }
-
-    isLoaded(url: string): boolean {
-        return this.loadedUrls().has(url);
-    }
-
-    // Returns a stagger delay so earlier images in the batch appear first
-    staggerDelay(index: number): string {
-        // Only stagger within first 8 items per page, rest load naturally
-        const slot = index % 20;
-        return slot < 8 ? `${slot * 60}ms` : '0ms';
+    onImgLoad(event: Event): void {
+        const img = event.target as HTMLImageElement;
+        const item = img.closest('.photo-item') as HTMLElement | null;
+        if (item) item.classList.add('loaded');
     }
 
     openLightbox(index: number, event: MouseEvent): void {
