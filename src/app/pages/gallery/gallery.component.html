@@ -1,12 +1,8 @@
 <main class="gallery-page">
 
-    <!-- Category filters -->
+    <!-- Category filters — no "All" -->
     <div class="filter-area">
         <div class="filter-bar">
-            <button class="filter-btn" [class.active]="activeCategory() === 'All'"
-                [attr.aria-pressed]="activeCategory() === 'All'" (click)="setCategory('All')">
-                All
-            </button>
             @for (cat of categories; track cat) {
             <button class="filter-btn" [class.active]="activeCategory() === cat"
                 [attr.aria-pressed]="activeCategory() === cat" (click)="setCategory(cat)">
@@ -16,53 +12,40 @@
         </div>
     </div>
 
-    <!-- Initial skeleton while first page loads -->
+    <!-- Initial skeleton — 4 visible placeholders -->
     @if (isInitialLoad()) {
     <div class="photo-grid">
         @for (n of skeletonItems; track n) {
-        <div class="photo-item">
+        <div class="photo-item skeleton-only">
             <div class="photo-skeleton"></div>
         </div>
         }
     </div>
     } @else {
 
-    <!-- Image count -->
-    <p class="gallery-count">{{ images().length }} photos loaded</p>
-
-    <!-- Photo grid -->
-    @if (images().length === 0 && !isLoading()) {
-    <div class="empty-state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="8.5" cy="8.5" r="1.5" />
-            <path d="m21 15-5-5L5 21" />
-        </svg>
-        <p>No photos yet.</p>
-    </div>
-    } @else {
+    <!-- Photo grid — all URLs rendered immediately, images reveal as they load -->
     <div class="photo-grid">
         @for (img of images(); track img.key; let i = $index) {
-        <button class="photo-item" [class.loaded]="isLoaded(img.url)" (click)="openLightbox(i, $event)"
-            [attr.aria-label]="'View ' + img.fileName">
+        <button class="photo-item" [class.loaded]="isLoaded(img.url)" [style.--stagger]="staggerDelay(i)"
+            (click)="openLightbox(i, $event)" [attr.aria-label]="'View photo'">
             <div class="photo-skeleton"></div>
-            <img [src]="img.url" [alt]="img.fileName" loading="lazy" (load)="onImageLoad(img.url)" />
+            <img [src]="img.url" alt="" loading="lazy" (load)="onImageLoad(img.url)" />
         </button>
+        }
+
+        <!-- Inline skeletons for in-progress next page -->
+        @if (isLoading()) {
+        @for (n of skeletonItems; track n) {
+        <div class="photo-item skeleton-only">
+            <div class="photo-skeleton"></div>
+        </div>
+        }
         }
     </div>
 
-    <!-- Infinite scroll sentinel -->
+    <!-- Sentinel for infinite scroll -->
     <div #sentinel class="sentinel"></div>
 
-    <!-- Loading more -->
-    @if (isLoading()) {
-    <div class="loading-more">
-        <span class="loading-more__dot"></span>
-        <span class="loading-more__dot"></span>
-        <span class="loading-more__dot"></span>
-    </div>
-    }
-    }
     }
 
     <!-- Lightbox -->

@@ -4,12 +4,10 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { GalleryApiService, GalleryImage, GALLERY_CATEGORIES, GalleryCategory } from '../../core/services/gallery-api.service';
 import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
-
-const PAGE_LIMIT = 24;
 
 @Component({
     selector: 'app-gallery',
@@ -21,6 +19,7 @@ const PAGE_LIMIT = 24;
 export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly api = inject(GalleryApiService);
     private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
     private readonly titleService = inject(Title);
     private readonly metaService = inject(Meta);
     private readonly platformId = inject(PLATFORM_ID);
@@ -30,7 +29,7 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
 
     readonly categories = GALLERY_CATEGORIES;
 
-    activeCategory = signal<GalleryCategory>('All');
+    activeCategory = signal<GalleryCategory>('Corporate');
     images = signal<GalleryImage[]>([]);
     loadedUrls = signal<Set<string>>(new Set());
     isLoading = signal(false);
@@ -40,11 +39,8 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
     private hasNext = true;
     private loadingPage = false;
 
-    // For "All" mode we cycle through categories
-    private allCategoryIndex = 0;
-    private allCategoryPages: Record<string, { page: number; hasNext: boolean }> = {};
-
-    readonly skeletonItems = Array.from({ length: PAGE_LIMIT }, (_, i) => i);
+    // Skeleton placeholders — always show 4 initially
+    readonly skeletonItems = Array.from({ length: 20 }, (_, i) => i);
 
     lightboxIndex = signal<number | null>(null);
     triggerElement: HTMLElement | null = null;
@@ -61,15 +57,14 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
 
     constructor() {
         this.titleService.setTitle('Gallery | Aditya Deshmukh Photography');
-        this.metaService.updateTag({ name: 'description', content: 'Browse the full gallery — films, fashion, commercial, and wedding photography.' });
+        this.metaService.updateTag({ name: 'description', content: 'Browse the full gallery — fashion, corporate, wedding and product photography.' });
     }
 
     ngOnInit(): void {
         const cat = this.route.snapshot.queryParams['category'] as GalleryCategory;
-        if (cat && cat !== 'All') {
-            this.activeCategory.set(cat);
-        }
-        this.loadNextPage();
+        const validCat = this.categories.find(c => c === cat);
+        this.activeCategory.set(validCat ?? 'Corporate');
+        this.fetchPage();
     }
 
     ngAfterViewInit(): void {
@@ -90,76 +85,29 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
         this.currentPage = 1;
         this.hasNext = true;
         this.loadingPage = false;
-        this.allCategoryIndex = 0;
-        this.allCategoryPages = {};
         this.isInitialLoad.set(true);
-        this.loadNextPage();
+        this.router.navigate([], { queryParams: { category: cat }, replaceUrl: true });
+        this.fetchPage();
         if (isPlatformBrowser(this.platformId)) {
             setTimeout(() => this.setupObserver(), 100);
         }
     }
 
-    private loadNextPage(): void {
-        if (this.loadingPage) return;
-
-        const cat = this.activeCategory();
-
-        if (cat === 'All') {
-            this.loadNextAllPage();
-        } else {
-            if (!this.hasNext) return;
-            this.fetchPage(cat, this.currentPage);
-        }
-    }
-
-    private loadNextAllPage(): void {
-        // Round-robin through categories for "All" view
-        const cats = [...GALLERY_CATEGORIES];
-        let attempts = 0;
-
-        while (attempts < cats.length) {
-            const cat = cats[this.allCategoryIndex % cats.length];
-            const state = this.allCategoryPages[cat] ?? { page: 1, hasNext: true };
-
-            if (state.hasNext) {
-                this.fetchPage(cat, state.page, true);
-                return;
-            }
-
-            this.allCategoryIndex++;
-            attempts++;
-        }
-        // All categories exhausted
-        this.hasNext = false;
-    }
-
-    private fetchPage(eventType: string, page: number, isAll = false): void {
+    private fetchPage(): void {
+        if (this.loadingPage || !this.hasNext) return;
         this.loadingPage = true;
         this.isLoading.set(true);
 
-        this.api.getImages(eventType, page, PAGE_LIMIT).subscribe({
+        this.api.getImages(this.activeCategory(), this.currentPage).subscribe({
             next: result => {
+                // Append all URLs immediately — browser starts fetching all in parallel
+                // Images will reveal themselves one by one via the (load) event + CSS fade
                 this.images.update(imgs => [...imgs, ...result.images]);
+                this.currentPage++;
+                this.hasNext = result.pagination.hasNext;
                 this.isInitialLoad.set(false);
                 this.isLoading.set(false);
                 this.loadingPage = false;
-
-                if (isAll) {
-                    this.allCategoryPages[eventType] = {
-                        page: page + 1,
-                        hasNext: result.pagination.hasNext,
-                    };
-                    this.allCategoryIndex++;
-                    // Check if any category still has pages
-                    const cats = [...GALLERY_CATEGORIES];
-                    this.hasNext = cats.some(c => {
-                        const s = this.allCategoryPages[c];
-                        return !s || s.hasNext;
-                    });
-                } else {
-                    this.currentPage = page + 1;
-                    this.hasNext = result.pagination.hasNext;
-                }
             },
             error: () => {
                 this.isLoading.set(false);
@@ -173,10 +121,9 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
         this.observer?.disconnect();
         this.observer = new IntersectionObserver(entries => {
             if (entries[0]?.isIntersecting && !this.loadingPage && this.hasNext) {
-                this.loadNextPage();
+                this.fetchPage();
             }
-        }, { rootMargin: '400px' });
-
+        }, { rootMargin: '600px' });
         if (this.sentinel?.nativeElement) {
             this.observer.observe(this.sentinel.nativeElement);
         }
@@ -188,6 +135,13 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
 
     isLoaded(url: string): boolean {
         return this.loadedUrls().has(url);
+    }
+
+    // Returns a stagger delay so earlier images in the batch appear first
+    staggerDelay(index: number): string {
+        // Only stagger within first 8 items per page, rest load naturally
+        const slot = index % 20;
+        return slot < 8 ? `${slot * 60}ms` : '0ms';
     }
 
     openLightbox(index: number, event: MouseEvent): void {

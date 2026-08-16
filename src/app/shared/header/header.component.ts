@@ -2,8 +2,7 @@ import { Component, inject, signal, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-
-const GALLERY_CATEGORIES = ['All', 'Films', 'Fashion', 'Commercial/Corporate', 'Wedding/Events'] as const;
+import { GALLERY_CATEGORIES } from '../../core/services/gallery-api.service';
 
 @Component({
     selector: 'app-header',
@@ -59,20 +58,12 @@ export class HeaderComponent {
 
     navigateGallery(category: string): void {
         this.galleryDropdownOpen.set(false);
-        if (category === 'All') {
-            this.router.navigate(['/gallery']);
-        } else {
-            this.router.navigate(['/gallery'], { queryParams: { category } });
-        }
+        this.router.navigate(['/gallery'], { queryParams: { category } });
     }
 
     navigateGalleryMobile(category: string): void {
         this.closeMenu();
-        if (category === 'All') {
-            this.router.navigate(['/gallery']);
-        } else {
-            this.router.navigate(['/gallery'], { queryParams: { category } });
-        }
+        this.router.navigate(['/gallery'], { queryParams: { category } });
     }
 
     scrollToAbout(): void {
