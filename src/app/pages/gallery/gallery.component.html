@@ -23,13 +23,14 @@
     </div>
     } @else {
 
-    <!-- Photo grid — all URLs rendered immediately, images reveal as they load -->
+    <!-- Photo grid — Netlify serves responsive thumbnails; lightbox keeps the original URL -->
     <div class="photo-grid">
         @for (img of images(); track img.key; let i = $index) {
         <button class="photo-item" (click)="openLightbox(i, $event)" [attr.aria-label]="'View photo'">
             <div class="photo-skeleton"></div>
-            <img [src]="img.url" alt="" [loading]="i < 8 ? 'eager' : 'lazy'" decoding="async" (load)="onImgLoad($event)"
-                (error)="onImgLoad($event)" />
+            <img [ngSrc]="img.thumbnailUrl ?? img.url" [alt]="img.fileName" fill
+                sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw"
+                [priority]="i === 0" (load)="onImgLoad($event)" (error)="onImgError($event)" />
         </button>
         }
 

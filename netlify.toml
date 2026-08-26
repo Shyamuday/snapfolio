@@ -2,6 +2,10 @@
   command   = "npm run build"
   publish   = "dist/snapfolio/browser"
 
+[images]
+  # Allow Netlify Image CDN to resize private S3 objects via their presigned URLs.
+  remote_images = ['https://520371284888-assets\.s3\.amazonaws\.com/.*']
+
 [[redirects]]
   from   = "/*"
   to     = "/index.html"

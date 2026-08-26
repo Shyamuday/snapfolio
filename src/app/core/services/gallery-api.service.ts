@@ -11,7 +11,10 @@ export interface GalleryImage {
     key: string;
     eventType: string;
     fileName: string;
+    size?: number;
     url: string;
+    /** Optional grid-sized image supplied by the API; the lightbox still uses url. */
+    thumbnailUrl?: string;
 }
 
 export interface GalleryPageResult {

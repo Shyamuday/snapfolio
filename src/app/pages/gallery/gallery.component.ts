@@ -2,8 +2,7 @@ import {
     Component, OnInit, OnDestroy, AfterViewInit,
     signal, computed, inject, ElementRef, ViewChild, PLATFORM_ID
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { GalleryApiService, GalleryImage, GALLERY_CATEGORIES, GalleryCategory } from '../../core/services/gallery-api.service';
@@ -12,7 +11,7 @@ import { LightboxComponent } from '../../shared/lightbox/lightbox.component';
 @Component({
     selector: 'app-gallery',
     standalone: true,
-    imports: [CommonModule, LightboxComponent],
+    imports: [CommonModule, NgOptimizedImage, LightboxComponent],
     templateUrl: './gallery.component.html',
     styleUrl: './gallery.component.scss',
 })
@@ -130,6 +129,12 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
         const img = event.target as HTMLImageElement;
         const item = img.closest('.photo-item') as HTMLElement | null;
         if (item) item.classList.add('loaded');
+    }
+
+    onImgError(event: Event): void {
+        const img = event.target as HTMLImageElement;
+        const item = img.closest('.photo-item') as HTMLElement | null;
+        if (item) item.classList.add('load-error');
     }
 
     openLightbox(index: number, event: MouseEvent): void {

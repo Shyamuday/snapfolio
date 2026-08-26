@@ -97,6 +97,17 @@
     pointer-events: none;
   }
 
+  &.load-error {
+    cursor: default;
+
+    img { display: none; }
+
+    .photo-skeleton {
+      animation: none;
+      background: #e3ddd5;
+    }
+  }
+
   // Pure skeleton placeholder (no img inside)
   &.skeleton-only {
     cursor: default;
