@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
-import { IMAGES } from '../../core/config/image-paths';
 
 @Component({
     selector: 'app-contact',
@@ -18,8 +17,8 @@ export class ContactComponent {
     ];
 
     readonly socialLinks = [
-        { name: 'Instagram', href: 'https://www.instagram.com/addy_d_0607?igsh=dnBvN2hneHNidHhs&utm_source=qr', icon: IMAGES.instagramIcon },
-        { name: 'WhatsApp', href: 'https://wa.me/919022800857', icon: IMAGES.whatsappIcon },
+        { name: 'Instagram', href: 'https://www.instagram.com/addy_d_0607?igsh=dnBvN2hneHNidHhs&utm_source=qr', icon: 'instagram' },
+        { name: 'WhatsApp', href: 'https://wa.me/919022800857', icon: 'whatsapp' },
     ];
 
     constructor(private title: Title, private meta: Meta) {

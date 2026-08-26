@@ -33,7 +33,7 @@ export interface GalleryPageResult {
 export class GalleryApiService {
     private readonly http = inject(HttpClient);
 
-    getImages(eventType: string, page: number, limit = 20): Observable<GalleryPageResult> {
+    getImages(eventType: string, page: number, limit = 12): Observable<GalleryPageResult> {
         return this.http
             .post<{ body: GalleryPageResult }>(API_URL, { eventType, page, limit })
             .pipe(map(res => res.body));

@@ -44,8 +44,13 @@
 
 .carousel__progress-bar {
   height: 100%;
+  width: 0;
   background: #ffffff;
-  transition: width 0.05s linear;
+  animation: carouselProgress linear forwards;
+}
+
+@keyframes carouselProgress {
+  to { width: 100%; }
 }
 
 // ── Track & Slides ────────────────────────────────────────────────────────────

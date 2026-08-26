@@ -8,7 +8,7 @@ import {
     PLATFORM_ID,
     inject,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 
 export interface CarouselSlide {
     image: string;
@@ -19,7 +19,7 @@ export interface CarouselSlide {
 @Component({
     selector: 'app-carousel',
     standalone: true,
-    imports: [],
+    imports: [NgOptimizedImage],
     templateUrl: './carousel.component.html',
     styleUrl: './carousel.component.scss',
 })
@@ -33,8 +33,6 @@ export class CarouselComponent implements OnInit, OnDestroy {
     activeIndex = signal(0);
     isAnimating = signal(false);
     animKey = signal(0);
-    progress = signal(0);
-    private progressTimer: ReturnType<typeof setInterval> | null = null;
 
     /** Tracks which slide images have finished loading */
     loadedSlides = signal<Set<number>>(new Set());
@@ -50,16 +48,19 @@ export class CarouselComponent implements OnInit, OnDestroy {
         this.loadedSlides.update(s => new Set([...s, index]));
     }
 
+    shouldRenderSlide(index: number): boolean {
+        const active = this.activeIndex();
+        return index === active || index === (active + 1) % this.total() || this.isSlideLoaded(index);
+    }
+
     ngOnInit(): void {
         if (isPlatformBrowser(this.platformId) && this.interval > 0) {
             this.startTimer();
-            this.startProgress();
         }
     }
 
     ngOnDestroy(): void {
         this.stopTimer();
-        this.stopProgress();
     }
 
     goTo(index: number): void {
@@ -69,7 +70,6 @@ export class CarouselComponent implements OnInit, OnDestroy {
         this.animKey.update(k => k + 1);
         setTimeout(() => this.isAnimating.set(false), 700);
         this.restartTimer();
-        this.restartProgress();
     }
 
     prev(): void { this.goTo(this.activeIndex() - 1); }
@@ -88,20 +88,4 @@ export class CarouselComponent implements OnInit, OnDestroy {
         if (isPlatformBrowser(this.platformId) && this.interval > 0) this.startTimer();
     }
 
-    private startProgress(): void {
-        const step = 100 / (this.interval / 50);
-        this.progress.set(0);
-        this.progressTimer = setInterval(() => {
-            this.progress.update(p => Math.min(p + step, 100));
-        }, 50);
-    }
-
-    private stopProgress(): void {
-        if (this.progressTimer) { clearInterval(this.progressTimer); this.progressTimer = null; }
-    }
-
-    private restartProgress(): void {
-        this.stopProgress();
-        if (isPlatformBrowser(this.platformId) && this.interval > 0) this.startProgress();
-    }
 }

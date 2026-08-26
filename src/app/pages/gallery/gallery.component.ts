@@ -37,8 +37,7 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
     private hasNext = true;
     private loadingPage = false;
 
-    // Skeleton placeholders — always show 4 initially
-    readonly skeletonItems = Array.from({ length: 20 }, (_, i) => i);
+    readonly skeletonItems = Array.from({ length: 12 }, (_, i) => i);
 
     lightboxIndex = signal<number | null>(null);
     triggerElement: HTMLElement | null = null;
@@ -119,7 +118,7 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
             if (entries[0]?.isIntersecting && !this.loadingPage && this.hasNext) {
                 this.fetchPage();
             }
-        }, { rootMargin: '600px' });
+        }, { rootMargin: '200px' });
         if (this.sentinel?.nativeElement) {
             this.observer.observe(this.sentinel.nativeElement);
         }

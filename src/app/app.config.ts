@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter, withInMemoryScrolling, withPreloading, PreloadAllModules } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 
 import { routes } from './app.routes';
@@ -10,8 +10,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       routes,
-      withInMemoryScrolling({ scrollPositionRestoration: 'top' }),
-      withPreloading(PreloadAllModules),
+      withInMemoryScrolling({ scrollPositionRestoration: 'top', anchorScrolling: 'enabled' }),
     ),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),

@@ -14,18 +14,25 @@ import {
     inject,
     PLATFORM_ID,
 } from '@angular/core';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { Photo } from '../../core/data/portfolio.data';
+import { isPlatformBrowser, DOCUMENT, NgOptimizedImage } from '@angular/common';
+
+export interface LightboxPhoto {
+    id: number;
+    title: string;
+    description: string;
+    filename: string;
+    category: string;
+}
 
 @Component({
     selector: 'app-lightbox',
     standalone: true,
-    imports: [],
+    imports: [NgOptimizedImage],
     templateUrl: './lightbox.component.html',
     styleUrl: './lightbox.component.scss',
 })
 export class LightboxComponent implements OnInit, OnDestroy, AfterViewInit {
-    @Input() photos: Photo[] = [];
+    @Input() photos: LightboxPhoto[] = [];
     @Input() activeIndex: number = 0;
     @Output() close = new EventEmitter<void>();
 

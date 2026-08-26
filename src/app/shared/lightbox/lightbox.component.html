@@ -13,7 +13,7 @@
             aria-label="Previous photo">&lsaquo;</button>
 
         <div class="photo-wrapper">
-            <img [src]="currentPhoto().filename" [alt]="currentPhoto().title" />
+            <img [ngSrc]="currentPhoto().filename" [alt]="currentPhoto().title" fill sizes="80vw" priority />
         </div>
 
         <button class="nav-btn next-btn" (click)="next()" [disabled]="!hasNext()"
